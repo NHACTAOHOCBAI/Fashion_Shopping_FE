@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import Category from "../pages/admin/category/Category";
-import AdminLayout from "../layouts/AdminLayout";
+import AdminLayout from "../layouts/admin_layouts/AdminLayout";
 import Dashboard from "../pages/admin/dashboard/Dashboard";
 const router = createBrowserRouter([
     {
