@@ -1,9 +1,10 @@
-import { AlignLeft, Bell, CircleChevronDown, LayoutDashboard, Package, User } from 'lucide-react';
+import { AlignLeft, Bell, ChevronDown, CircleChevronDown, LayoutDashboard, Package, User } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router';
 import Sidebar from './Sidebar';
 import { Avatar, Popover } from 'antd';
 import MyPopover from '../../components/MyPopover';
+import MyClickable from '../../components/MyClickable';
 
 const content = (
     <div>
@@ -61,9 +62,9 @@ const AdminLayout = () => {
             />
             <div className="flex-1">
                 <header className="bg-white  p-3 flex items-center justify-between">
-                    <AlignLeft strokeWidth={1} onClick={toggleSidebar} />
+                    <MyClickable> <AlignLeft strokeWidth={1} onClick={toggleSidebar} /></MyClickable>
                     <div className='flex items-center gap-6 ml-auto mr-[20px]'>
-                        <Bell size={18} strokeWidth={1} />
+                        <MyClickable ><Bell size={18} strokeWidth={1} /></MyClickable>
                         <div className='flex gap-1 items-center' >
                             <Avatar icon={<User strokeWidth={1} />} />
                             <div className='text-[10px] drop-shadow'>
@@ -75,7 +76,7 @@ const AdminLayout = () => {
                                 title="Title"
                                 trigger="click"
                             >
-                                <CircleChevronDown size={18} strokeWidth={1} />
+                                <MyClickable><ChevronDown size={20} strokeWidth={1} /></MyClickable>
                             </MyPopover>
                         </div>
                     </div>
