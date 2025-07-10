@@ -1,5 +1,6 @@
 import { Popover } from "antd";
 import type { JSX } from "react";
+import '../styles/my_popover.css'; // Adjust the path as necessary
 
 type MyPopoverProps = {
     content: React.ReactNode;

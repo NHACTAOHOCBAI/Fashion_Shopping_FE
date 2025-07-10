@@ -1,8 +1,12 @@
-import { Spin } from "antd";
+import { Spin, type SpinProps } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
-const MyLoading = () => {
-    return (
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} className="text-accent-pinkRed block" spin />} />
-    );
+interface MyLoadingProps {
+    spinStyle?: SpinProps;
+    size?: number
 }
+const MyLoading: React.FC<MyLoadingProps> = ({ spinStyle, size = 48 }) => {
+    return (
+        <Spin  {...spinStyle} indicator={<LoadingOutlined spin style={{ fontSize: size }} />} />
+    );
+};
 export default MyLoading;
