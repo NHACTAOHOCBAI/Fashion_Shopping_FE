@@ -5,6 +5,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { Input, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
+import { Search } from 'lucide-react';
 const itemsPerPage = 4;
 const App: React.FC = () => {
     const [dataSource, setDataSource] = useState<Record<string, any>[]>([]);
@@ -64,26 +65,33 @@ const App: React.FC = () => {
 
     return (
         <div className='flex gap-[10px]'>
-            <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-            <Input />
-            <MyTable
-                dataSource={dataSource}
-                columns={columns}
-                totalItems={totalItems}
-                currentPage={currentPage}
-                itemsPerPage={itemsPerPage}
-                onPageChange={setCurrentPage}
-                isLoading={isLoading}
-            />
-            <MyTable
-                dataSource={dataSource}
-                columns={columns}
-                totalItems={totalItems}
-                currentPage={currentPage}
-                itemsPerPage={itemsPerPage}
-                onPageChange={setCurrentPage}
-                isLoading={isLoading}
-            />
+            <div className='flex-[2] gap-[10px] flex flex-col'>
+                <Input
+                    prefix={<Search size={20} strokeWidth={1} />}
+                    className='rounded-[14px] p-2'
+                    placeholder='Search...'
+                />
+                <MyTable
+                    dataSource={dataSource}
+                    columns={columns}
+                    totalItems={totalItems}
+                    currentPage={currentPage}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                    isLoading={isLoading}
+                />
+            </div>
+            <div className='flex-[1]'>
+                <MyTable
+                    dataSource={dataSource}
+                    columns={columns}
+                    totalItems={totalItems}
+                    currentPage={currentPage}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                    isLoading={isLoading}
+                />
+            </div>
         </div>
     );
 };
