@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import Sidebar from './Sidebar';
 import { Avatar } from 'antd';
-import MyPopover from '../../components/MyPopover';
+import MyPopover from '../../components/my_popover/MyPopover';
 import MyClickable from '../../components/MyClickable';
 
 const AdminLayout = () => {

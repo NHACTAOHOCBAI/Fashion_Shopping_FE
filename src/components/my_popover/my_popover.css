@@ -1,0 +1,3 @@
+.no-shadow-popover .ant-popover-inner {
+  box-shadow: none !important;
+}
