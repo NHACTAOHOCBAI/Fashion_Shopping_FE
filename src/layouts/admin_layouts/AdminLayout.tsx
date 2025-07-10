@@ -1,17 +1,11 @@
-import { AlignLeft, Bell, ChevronDown, CircleChevronDown, LayoutDashboard, Package, User } from 'lucide-react';
+import { AlignLeft, Bell, ChevronDown, LayoutDashboard, Package, User } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link, Outlet, useLocation } from 'react-router';
 import Sidebar from './Sidebar';
-import { Avatar, Popover } from 'antd';
+import { Avatar } from 'antd';
 import MyPopover from '../../components/MyPopover';
 import MyClickable from '../../components/MyClickable';
 
-const content = (
-    <div>
-        <p>Content</p>
-        <p>Content</p>
-    </div>
-);
 const AdminLayout = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const { pathname } = useLocation();
@@ -53,7 +47,7 @@ const AdminLayout = () => {
     };
 
     return (
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex h-screen bg-background-gray">
             {/* Sidebar */}
             <Sidebar
                 isCollapsed={isCollapsed}
@@ -83,10 +77,10 @@ const AdminLayout = () => {
                 </header>
 
                 {/* Main Content */}
-                <div className="bg-background-gray h-full rounded shadow-md">
-
-
+                <div className="flex-1 m-[10px]  overflow-auto max-h-[590px]">
+                    <Outlet />
                 </div>
+
             </div>
         </div>
     );
