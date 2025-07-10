@@ -1,10 +1,8 @@
-import { AlignLeft, Bell, ChevronDown, LayoutDashboard, Package, User } from 'lucide-react';
+import { LayoutDashboard, Package } from 'lucide-react';
 import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import Sidebar from './Sidebar';
-import { Avatar } from 'antd';
-import MyPopover from '../../components/MyPopover';
-import MyClickable from '../../components/MyClickable';
+import Header from './Header';
 
 const AdminLayout = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -55,7 +53,7 @@ const AdminLayout = () => {
                 items={fakedata}
             />
             <div className="flex-1">
-                <header className="bg-white  p-3 flex items-center justify-between">
+                {/* <header className="bg-white  p-3 flex items-center justify-between">
                     <MyClickable> <AlignLeft strokeWidth={1} onClick={toggleSidebar} /></MyClickable>
                     <div className='flex items-center gap-6 ml-auto mr-[20px]'>
                         <MyClickable ><Bell size={18} strokeWidth={1} /></MyClickable>
@@ -74,10 +72,10 @@ const AdminLayout = () => {
                             </MyPopover>
                         </div>
                     </div>
-                </header>
-
+                </header> */}
+                <Header toggleSidebar={toggleSidebar} />
                 {/* Main Content */}
-                <div className="flex-1 m-[10px]  overflow-auto max-h-[590px]">
+                <div className="flex-1 p-[20px]  overflow-auto max-h-[590px]">
                     <Outlet />
                 </div>
 
