@@ -1,3 +1,8 @@
 .no-shadow-popover .ant-popover-inner {
   box-shadow: none !important;
 }
+/* Đảm bảo file này được import trong src/main.tsx hoặc App.tsx */
+/* .no-shadow-select-dropdown {
+  box-shadow: none !important;
+  border-radius: 8px !important;
+} */

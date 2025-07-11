@@ -75,7 +75,7 @@ const AdminLayout = () => {
                 </header> */}
                 <Header toggleSidebar={toggleSidebar} />
                 {/* Main Content */}
-                <div className="flex-1 p-[20px]  overflow-auto max-h-[590px]">
+                <div className="flex-1 p-[20px]  overflow-auto max-h-[670px]">
                     <Outlet />
                 </div>
 

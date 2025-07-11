@@ -3,9 +3,9 @@ import MyTable from '../../../components/MyTable';
 import MyClickable from '../../../components/MyClickable';
 import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { Input, Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
 import { Search } from 'lucide-react';
+import NewCategory from './NewCategory';
 const itemsPerPage = 4;
 const App: React.FC = () => {
     const [dataSource, setDataSource] = useState<Record<string, any>[]>([]);
@@ -49,7 +49,7 @@ const App: React.FC = () => {
         {
             title: 'Action',
             key: 'action',
-            render: (text: any, record: any) => (
+            render: () => (
                 <div className="flex rounded-lg border overflow-hidden bg-background-gray items-center justify-evenly w-[70px] h-[30px]">
                     <MyClickable>
                         <FaRegEdit />
@@ -68,7 +68,7 @@ const App: React.FC = () => {
             <div className='flex-[2] gap-[10px] flex flex-col'>
                 <Input
                     prefix={<Search size={20} strokeWidth={1} />}
-                    className='rounded-[14px] p-2'
+                    className='rounded-[14px] p-2 w-[60%] min-w-[200px]'
                     placeholder='Search...'
                 />
                 <MyTable
@@ -82,15 +82,7 @@ const App: React.FC = () => {
                 />
             </div>
             <div className='flex-[1]'>
-                <MyTable
-                    dataSource={dataSource}
-                    columns={columns}
-                    totalItems={totalItems}
-                    currentPage={currentPage}
-                    itemsPerPage={itemsPerPage}
-                    onPageChange={setCurrentPage}
-                    isLoading={isLoading}
-                />
+                <NewCategory />
             </div>
         </div>
     );
