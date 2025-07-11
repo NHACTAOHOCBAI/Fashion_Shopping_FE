@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 /* Ghi ở file global hoặc tailwind layer nếu dùng Tailwind */
-.no-shadow-popover .ant-popover-inner {
+/* .no-shadow-popover .ant-popover-inner {
   box-shadow: none !important;
-}
+} */
 
 body {
     color: #666666;

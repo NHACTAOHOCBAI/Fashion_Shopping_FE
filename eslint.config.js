@@ -22,6 +22,7 @@ export default tseslint.config([
     rules: {
       'no-unused-vars': 'off', // Tắt rule từ eslint
       '@typescript-eslint/no-unused-vars': 'off', // Tắt rule từ typescript-eslint
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
 ])

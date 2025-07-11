@@ -1,17 +1,9 @@
-import { AlignLeft, Bell, ChevronDown, CircleChevronDown, LayoutDashboard, Package, User } from 'lucide-react';
+import { LayoutDashboard, Package } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link, Outlet, useLocation } from 'react-router';
 import Sidebar from './Sidebar';
-import { Avatar, Popover } from 'antd';
-import MyPopover from '../../components/MyPopover';
-import MyClickable from '../../components/MyClickable';
+import Header from './Header';
 
-const content = (
-    <div>
-        <p>Content</p>
-        <p>Content</p>
-    </div>
-);
 const AdminLayout = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const { pathname } = useLocation();
@@ -53,7 +45,7 @@ const AdminLayout = () => {
     };
 
     return (
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex h-screen bg-background-gray">
             {/* Sidebar */}
             <Sidebar
                 isCollapsed={isCollapsed}
@@ -61,7 +53,7 @@ const AdminLayout = () => {
                 items={fakedata}
             />
             <div className="flex-1">
-                <header className="bg-white  p-3 flex items-center justify-between">
+                {/* <header className="bg-white  p-3 flex items-center justify-between">
                     <MyClickable> <AlignLeft strokeWidth={1} onClick={toggleSidebar} /></MyClickable>
                     <div className='flex items-center gap-6 ml-auto mr-[20px]'>
                         <MyClickable ><Bell size={18} strokeWidth={1} /></MyClickable>
@@ -80,13 +72,13 @@ const AdminLayout = () => {
                             </MyPopover>
                         </div>
                     </div>
-                </header>
-
+                </header> */}
+                <Header toggleSidebar={toggleSidebar} />
                 {/* Main Content */}
-                <div className="bg-background-gray h-full rounded shadow-md">
-
-
+                <div className="flex-1 p-[20px]  overflow-auto max-h-[670px]">
+                    <Outlet />
                 </div>
+
             </div>
         </div>
     );
