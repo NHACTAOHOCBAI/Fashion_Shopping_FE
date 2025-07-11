@@ -41,7 +41,7 @@ const NewCategory = () => {
                 </Form.Item>
                 <Form.Item<Category>
                     label="Parent Category : "
-                    name="image"
+                    name="imageUrl"
                 >
                     <MyUploadFile onFileListChange={setFileList} />
                 </Form.Item>

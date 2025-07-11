@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MyTable from '../../../components/MyTable';
 import MyClickable from '../../../components/MyClickable';
 import { FaRegEdit } from 'react-icons/fa';
@@ -6,46 +6,57 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { Input } from 'antd';
 import { Search } from 'lucide-react';
 import NewCategory from './NewCategory';
+import { useCategories } from '../../../hooks/useCategory';
+import { formatDate } from '../../../utils/formatTime';
+import { useDebounce } from '../../../hooks/useDebounce';
 const itemsPerPage = 4;
 const App: React.FC = () => {
-    const [dataSource, setDataSource] = useState<Record<string, any>[]>([]);
-    const [totalItems, setTotalItems] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const fetchData = async (page: number) => {
-        setIsLoading(true);
-        try {
-            const response = await new Promise<{ data: Record<string, any>[]; total: number }>((resolve) =>
-                setTimeout(() => {
-                    const start = (page - 1) * itemsPerPage;
-                    const end = start + itemsPerPage;
-                    const data = [
-                        { key: '1', name: 'Mike', age: 32, address: '10 Downing Street' },
-                        { key: '2', name: 'John', age: 42, address: '10 Downing Street' },
-                        { key: '3', name: 'Mike', age: 32, address: '10 Downing Street' },
-                        { key: '4', name: 'John', age: 42, address: '10 Downing Street' },
-                        { key: '3', name: 'Mike', age: 32, address: '10 Downing Street' },
-                        { key: '4', name: 'John', age: 42, address: '10 Downing Street' },
-                    ].slice(start, end);
-                    resolve({ data, total: 6 }); // Giả lập tổng số mục
-                }, 1000) // Độ trễ 1 giây để mô phỏng loading
-            );
-            const { data, total } = response;
-            setDataSource(data);
-            setTotalItems(total);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    useEffect(() => {
-        fetchData(currentPage);
-    }, [currentPage]);
-
+    const [keyword, setKeyword] = useState('');
+    // ✅ Debounced values
+    const debouncedKeyword = useDebounce(keyword, 300);
+    const debouncedPage = useDebounce(currentPage, 300);
+    const { data: categoriesData, isLoading } = useCategories({
+        page: debouncedPage,
+        limit: itemsPerPage,
+        keyword: debouncedKeyword,
+    });
     const columns = [
+        {
+            title: 'Id',
+            key: 'id',
+            render: (_: any, record: Category) => (
+                <p className="text-accent-pinkRed">
+                    {`#${record.id}`}
+                </p>
+            )
+        },
+        {
+            title: 'Image',
+            key: 'image',
+            render: (_: any, record: Category) => (
+                <img className='rounded object-cover size-[50px] bg-black' src={record.imageUrl} />
+            )
+        },
         { title: 'Name', dataIndex: 'name', key: 'name' },
-        { title: 'Age', dataIndex: 'age', key: 'age' },
-        { title: 'Address', dataIndex: 'address', key: 'address' },
+        {
+            title: 'Created at',
+            key: 'id',
+            render: (_: any, record: Category) => (
+                <p >
+                    {formatDate(record.createdAt)}
+                </p>
+            )
+        },
+        {
+            title: 'Updated at',
+            key: 'id',
+            render: (_: any, record: Category) => (
+                <p>
+                    {formatDate(record.updatedAt)}
+                </p>
+            )
+        },
         {
             title: 'Action',
             key: 'action',
@@ -67,14 +78,19 @@ const App: React.FC = () => {
         <div className='flex gap-[10px]'>
             <div className='flex-[2] gap-[10px] flex flex-col'>
                 <Input
+                    value={keyword}
+                    onChange={(e) => {
+                        setKeyword(e.target.value);
+                        setCurrentPage(1); // reset page khi search
+                    }}
                     prefix={<Search size={20} strokeWidth={1} />}
                     className='rounded-[14px] p-2 w-[60%] min-w-[200px]'
                     placeholder='Search...'
                 />
                 <MyTable
-                    dataSource={dataSource}
+                    dataSource={categoriesData?.categories || []}
                     columns={columns}
-                    totalItems={totalItems}
+                    totalItems={categoriesData?.pagination.total || 0}
                     currentPage={currentPage}
                     itemsPerPage={itemsPerPage}
                     onPageChange={setCurrentPage}

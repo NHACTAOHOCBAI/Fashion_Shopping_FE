@@ -19,10 +19,10 @@ const MyClickable: React.FC<ClickEffectProps> = ({ children, onClick, disabled }
         <div
             onClick={handleClick}
             className={`
-                cursor-pointer flex items-center justify-center 
+                 flex items-center justify-center 
                  transition-transform duration-150 ease-in-out
                 ${isClicked && !disabled ? 'scale-75 opacity-75' : 'hover:scale-90'}
-                ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+                ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
             `}
         >
             {children}

@@ -60,7 +60,7 @@ const MyTable: React.FC<TableProps> = ({
                         </tr>
                     ) : dataSource.length === 0 ? (
                         <tr>
-                            <td colSpan={columns.length} className="text-center py-4 text-gray-500">
+                            <td colSpan={columns.length} className="text-center py-4 ">
                                 No data available.
                             </td>
                         </tr>
@@ -102,7 +102,7 @@ const MyTable: React.FC<TableProps> = ({
                     <div className='border h-full'></div>
                     <MyClickable
                         onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
+                        disabled={currentPage >= totalPages}
                     >
                         <IoIosArrowForward />
                     </MyClickable>
