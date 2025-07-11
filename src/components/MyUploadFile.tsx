@@ -5,9 +5,10 @@ const { Dragger } = Upload;
 
 type MyUploadFileProps = {
     onFileListChange?: (files: UploadFile[]) => void;
+    disabled?: boolean
 };
 
-const MyUploadFile = ({ onFileListChange }: MyUploadFileProps) => {
+const MyUploadFile = ({ onFileListChange, disabled }: MyUploadFileProps) => {
     const props: UploadProps = {
         name: 'image',
         multiple: true,
@@ -19,7 +20,7 @@ const MyUploadFile = ({ onFileListChange }: MyUploadFileProps) => {
     };
 
     return (
-        <Dragger {...props}>
+        <Dragger disabled={disabled} {...props}>
             <p className="ant-upload-drag-icon">
                 <InboxOutlined />
             </p>
