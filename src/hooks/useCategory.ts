@@ -1,6 +1,6 @@
 // hooks/useUser.ts
-import { useQuery } from '@tanstack/react-query';
-import { getCategories } from '../services/categories';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createCategory, getCategories } from '../services/categories';
 
 export const useCategories = (params: QueryParams) =>
     useQuery({
@@ -8,3 +8,13 @@ export const useCategories = (params: QueryParams) =>
         queryFn: () => getCategories(params),
         // keepPreviousData: true, // giữ data cũ khi query thay đổi
     });
+export const useCreateCategory = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: createCategory,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['categories'] });
+        },
+    });
+};
