@@ -7,20 +7,18 @@ import { useCallback, useEffect, useState, memo } from 'react';
 import MyVisibleUpload from '../../../components/MyVisibileUpload';
 interface UpdateCategoryProps {
     isUpdateOpen: boolean,
-    setIsUpdateOpen: (value: boolean) => void,
     updatedCategory: Category | undefined,
-    setUpdatedCategory: (value: Category | undefined) => void
+    closeUpdateModal: () => void
 }
-const UpdateCategory = ({ isUpdateOpen, setIsUpdateOpen, updatedCategory, setUpdatedCategory }: UpdateCategoryProps) => {
+const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory }: UpdateCategoryProps) => {
     const { mutate: updateCategory, isPending } = useUpdateCategory();
     const [image, setImage] = useState<File | undefined>(undefined);
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage();
     const handleCancel = useCallback(() => {
-        setUpdatedCategory(undefined);
         form.resetFields();
-        setIsUpdateOpen(false);
-    }, [form, setUpdatedCategory, setIsUpdateOpen]);
+        closeUpdateModal()
+    }, [form, closeUpdateModal]);
     // thuc chat handleCancel se luon khong thay doi
     const onFinish: FormProps<Category>['onFinish'] = useCallback((values: Category) => {
         updateCategory({

@@ -3,7 +3,7 @@ import { Button, Form, Input, message } from 'antd';
 import MySelect from '../../../components/MySelect';
 import TextArea from 'antd/es/input/TextArea';
 import MyUploadFile from '../../../components/MyUploadFile';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { SquarePlus } from 'lucide-react';
 import { useCreateCategory } from '../../../hooks/useCategory';
 const NewCategory = () => {

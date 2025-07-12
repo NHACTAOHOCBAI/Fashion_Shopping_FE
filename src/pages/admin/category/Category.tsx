@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import MyTable from '../../../components/MyTable';
 import MyClickable from '../../../components/MyClickable';
 import { FaRegEdit } from 'react-icons/fa';
@@ -8,19 +8,17 @@ import { Search } from 'lucide-react';
 import NewCategory from './NewCategory';
 import { useCategories } from '../../../hooks/useCategory';
 import { formatDate } from '../../../utils/formatTime';
-import { useDebounce } from '../../../hooks/useDebounce';
 import UpdateCategory from './UpdateCategory';
+import useUpdateModal from '../../../hooks/useUpdateModal';
+import usePaginationSearch from '../../../hooks/usePaginationSearch';
 const itemsPerPage = 4;
 const Categories: React.FC = () => {
-    //update category
-    const [isUpdateOpen, setIsUpdateOpen] = useState(false)
-    const [updatedCategory, setUpdatedCategory] = useState<Category>()
+    const {
+        data: updatedCategory, isModalOpen: isUpdateOpen,
+        openModal: openUpdateModal, closeModal: closeUpdateModal
+    } = useUpdateModal<Category>()
     //
-    const [currentPage, setCurrentPage] = useState(1);
-    const [keyword, setKeyword] = useState('');
-    // ✅ Debounced values
-    const debouncedKeyword = useDebounce(keyword, 300);
-    const debouncedPage = useDebounce(currentPage, 300);
+    const { currentPage, setCurrentPage, keyword, setKeyword, debouncedKeyword, debouncedPage } = usePaginationSearch()
     const { data: categoriesData, isLoading } = useCategories({
         page: debouncedPage,
         limit: itemsPerPage,
@@ -70,8 +68,7 @@ const Categories: React.FC = () => {
             render: (_: any, record: Category) => (
                 <div className="flex rounded-lg border overflow-hidden bg-background-gray items-center justify-evenly w-[70px] h-[30px]">
                     <MyClickable onClick={() => {
-                        setIsUpdateOpen(true)
-                        setUpdatedCategory(record)
+                        openUpdateModal(record)
                     }}>
                         <FaRegEdit />
                     </MyClickable>
@@ -82,7 +79,7 @@ const Categories: React.FC = () => {
                 </div>
             ),
         },
-    ], [])
+    ], [openUpdateModal])
 
     return (
         <div className='flex gap-[10px]'>
@@ -111,9 +108,8 @@ const Categories: React.FC = () => {
                 <NewCategory />
             </div>
             <UpdateCategory
+                closeUpdateModal={closeUpdateModal}
                 isUpdateOpen={isUpdateOpen}
-                setIsUpdateOpen={setIsUpdateOpen}
-                setUpdatedCategory={setUpdatedCategory}
                 updatedCategory={updatedCategory}
             />
         </div>
