@@ -1,40 +1,63 @@
-import type { FormProps, UploadFile } from 'antd';
-import { Button, Form, Input, message } from 'antd';
+
+import { Form, Input, message, Modal, type FormProps } from 'antd';
 import MySelect from '../../../components/MySelect';
 import TextArea from 'antd/es/input/TextArea';
-import MyUploadFile from '../../../components/MyUploadFile';
-import { useState } from 'react';
-import { SquarePlus } from 'lucide-react';
-import { useCreateCategory } from '../../../hooks/useCategory';
-const NewCategory = () => {
-    const { mutate: createCategory, isPending } = useCreateCategory();
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
+import { useUpdateCategory } from '../../../hooks/useCategory';
+import { useEffect, useState } from 'react';
+import MyVisibleUpload from '../../../components/MyVisibileUpload';
+interface UpdateCategoryProps {
+    isUpdateOpen: boolean,
+    setIsUpdateOpen: (value: boolean) => void,
+    updatedCategory: Category | undefined,
+    setUpdatedCategory: (value: Category | undefined) => void
+}
+const UpdateCategory = ({ isUpdateOpen, setIsUpdateOpen, updatedCategory, setUpdatedCategory }: UpdateCategoryProps) => {
+    const { mutate: updateCategory, isPending } = useUpdateCategory();
+    const [image, setImage] = useState<File | undefined>(undefined);
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage();
+    const handleCancel = () => {
+        setUpdatedCategory(undefined)
+        form.resetFields()
+        setIsUpdateOpen(false);
+    };
     const onFinish: FormProps<Category>['onFinish'] = (values) => {
-        createCategory({
+        updateCategory({
+            id: updatedCategory?.id || 0,
             name: values.name,
             description: values.description,
-            image: fileList[0]?.originFileObj,
+            image: image,
             parentId: values.parentId,
         },
             {
                 onSuccess: () => {
-                    form.resetFields();
-                    messageApi.success("Create categories success")
+                    handleCancel()
+                    messageApi.success("Update categories success")
                 },
                 onError: () => {
-                    messageApi.error("Create categories failed")
+                    messageApi.error("Update categories failed")
                 },
-            },
-
+            }
         )
     };
+    useEffect(() => {
+        console.log(updatedCategory)
+        form.setFieldsValue({
+            name: updatedCategory?.name,
+            parentId: updatedCategory?.parentId,
+            description: updatedCategory?.description
+        })
+    }, [updatedCategory, form])
     return (
         <>
             {contextHolder}
-            <div className='bg-white p-[10px] rounded-lg border'>
-                <h2 className='text-accent-pinkRed font-bold text-[16px] mb-[5px] flex gap-[10px]'><SquarePlus strokeWidth={1.75} /> Add New Category</h2>
+            <Modal
+                title="Edit Category"
+                open={isUpdateOpen}
+                onOk={() => form.submit()}
+                onCancel={handleCancel}
+                loading={isPending}
+            >
                 <Form
                     form={form}
                     layout='vertical'
@@ -46,14 +69,14 @@ const NewCategory = () => {
                         name="name"
                         rules={[{ required: true, message: 'Please input your username!' }]}
                     >
-                        <Input disabled={isPending} placeholder='Shoulder bags...' />
+                        <Input placeholder='Shoulder bags...' />
                     </Form.Item>
                     <Form.Item<Category>
                         label="Parent Category : "
                         name="parentId"
                     >
                         <MySelect
-                            disabled={isPending}
+
                             placeholder="Bags..."
                             options={[
                                 { value: 1, label: 'Apple' },
@@ -66,23 +89,23 @@ const NewCategory = () => {
                         label="Image : "
                         name="imageUrl"
                     >
-                        <MyUploadFile disabled={isPending} onFileListChange={setFileList} />
+                        <MyVisibleUpload
+                            initialImageUrl={updatedCategory?.imageUrl}
+                            onChange={(file) => setImage(file)}
+                        />
                     </Form.Item>
                     <Form.Item<Category>
                         label="Desciption : "
                         name="description"
                     >
                         <TextArea
-                            disabled={isPending}
                             rows={5}
                         />
                     </Form.Item>
-
                 </Form>
-                <Button loading={isPending} className='ml-auto block mt-auto' type="primary" onClick={() => form.submit()}>Create</Button>
-            </div>
+            </Modal>
         </>
-    )
-}
+    );
+};
 
-export default NewCategory;
+export default UpdateCategory;
