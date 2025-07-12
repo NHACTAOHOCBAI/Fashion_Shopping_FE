@@ -2,8 +2,10 @@ import { AlignLeft, Bell, ChevronDown, User } from "lucide-react"
 import MyClickable from "../../components/MyClickable"
 import { Avatar } from "antd"
 import MyPopover from "../../components/MyPopover"
+import { memo } from "react"
 
 const Header = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
+    console.log("header")
     return (
         <header className="bg-white  p-3 flex items-center justify-between">
             <MyClickable> <AlignLeft strokeWidth={1} onClick={toggleSidebar} /></MyClickable>
@@ -27,4 +29,4 @@ const Header = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
         </header>
     )
 }
-export default Header;
+export default memo(Header);

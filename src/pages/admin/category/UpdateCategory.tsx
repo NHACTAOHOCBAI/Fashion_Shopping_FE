@@ -3,7 +3,7 @@ import { Form, Input, message, Modal, type FormProps } from 'antd';
 import MySelect from '../../../components/MySelect';
 import TextArea from 'antd/es/input/TextArea';
 import { useUpdateCategory } from '../../../hooks/useCategory';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, memo } from 'react';
 import MyVisibleUpload from '../../../components/MyVisibileUpload';
 interface UpdateCategoryProps {
     isUpdateOpen: boolean,
@@ -16,12 +16,13 @@ const UpdateCategory = ({ isUpdateOpen, setIsUpdateOpen, updatedCategory, setUpd
     const [image, setImage] = useState<File | undefined>(undefined);
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage();
-    const handleCancel = () => {
-        setUpdatedCategory(undefined)
-        form.resetFields()
+    const handleCancel = useCallback(() => {
+        setUpdatedCategory(undefined);
+        form.resetFields();
         setIsUpdateOpen(false);
-    };
-    const onFinish: FormProps<Category>['onFinish'] = (values) => {
+    }, [form, setUpdatedCategory, setIsUpdateOpen]);
+    // thuc chat handleCancel se luon khong thay doi
+    const onFinish: FormProps<Category>['onFinish'] = useCallback((values: Category) => {
         updateCategory({
             id: updatedCategory?.id || 0,
             name: values.name,
@@ -31,17 +32,17 @@ const UpdateCategory = ({ isUpdateOpen, setIsUpdateOpen, updatedCategory, setUpd
         },
             {
                 onSuccess: () => {
-                    handleCancel()
-                    messageApi.success("Update categories success")
+                    handleCancel();
+                    messageApi.success("Update categories success");
                 },
                 onError: () => {
-                    messageApi.error("Update categories failed")
+                    messageApi.error("Update categories failed");
                 },
             }
-        )
-    };
+        );
+    }, [updatedCategory, image, handleCancel, messageApi, updateCategory]);
+    // thuc chat deps chi co updatedCategory, image
     useEffect(() => {
-        console.log(updatedCategory)
         form.setFieldsValue({
             name: updatedCategory?.name,
             parentId: updatedCategory?.parentId,
@@ -108,4 +109,4 @@ const UpdateCategory = ({ isUpdateOpen, setIsUpdateOpen, updatedCategory, setUpd
     );
 };
 
-export default UpdateCategory;
+export default memo(UpdateCategory);

@@ -1,5 +1,5 @@
 import { LayoutDashboard, Package } from 'lucide-react';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import Sidebar from './Sidebar';
 import Header from './Header';
@@ -8,7 +8,7 @@ const AdminLayout = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const { pathname } = useLocation();
     const endpoints = pathname.split('/').pop() as string
-    const fakedata = [
+    const fakedata = useMemo(() => [
         {
             groupName: 'overview',
             items: [
@@ -39,11 +39,10 @@ const AdminLayout = () => {
                 }
             ]
         }
-    ]
-    const toggleSidebar = () => {
+    ], [])
+    const toggleSidebar = useCallback(() => {
         setIsCollapsed(!isCollapsed);
-    };
-
+    }, [isCollapsed])
     return (
         <div className="flex h-screen bg-background-gray">
             {/* Sidebar */}
@@ -67,4 +66,4 @@ const AdminLayout = () => {
 
 
 
-export default AdminLayout;
+export default AdminLayout

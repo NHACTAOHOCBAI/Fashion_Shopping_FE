@@ -3,7 +3,7 @@ import { Button, Form, Input, message } from 'antd';
 import MySelect from '../../../components/MySelect';
 import TextArea from 'antd/es/input/TextArea';
 import MyUploadFile from '../../../components/MyUploadFile';
-import { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SquarePlus } from 'lucide-react';
 import { useCreateCategory } from '../../../hooks/useCategory';
 const NewCategory = () => {
@@ -11,7 +11,7 @@ const NewCategory = () => {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage();
-    const onFinish: FormProps<Category>['onFinish'] = (values) => {
+    const onFinish: FormProps<Category>['onFinish'] = useCallback((values: Category) => {
         createCategory({
             name: values.name,
             description: values.description,
@@ -29,7 +29,9 @@ const NewCategory = () => {
             },
 
         )
-    };
+    }, [createCategory, fileList, form, messageApi])
+    // thuc chat deps chi co fileList
+
     return (
         <>
             {contextHolder}
@@ -85,4 +87,4 @@ const NewCategory = () => {
     )
 }
 
-export default NewCategory;
+export default React.memo(NewCategory) 

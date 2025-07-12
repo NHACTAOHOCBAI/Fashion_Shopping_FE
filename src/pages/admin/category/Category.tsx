@@ -11,7 +11,7 @@ import { formatDate } from '../../../utils/formatTime';
 import { useDebounce } from '../../../hooks/useDebounce';
 import UpdateCategory from './UpdateCategory';
 const itemsPerPage = 4;
-const App: React.FC = () => {
+const Categories: React.FC = () => {
     //update category
     const [isUpdateOpen, setIsUpdateOpen] = useState(false)
     const [updatedCategory, setUpdatedCategory] = useState<Category>()
@@ -83,6 +83,7 @@ const App: React.FC = () => {
             ),
         },
     ], [])
+
     return (
         <div className='flex gap-[10px]'>
             <div className='flex-[2] gap-[10px] flex flex-col'>
@@ -118,4 +119,4 @@ const App: React.FC = () => {
         </div>
     );
 };
-export default App;
+export default Categories;
