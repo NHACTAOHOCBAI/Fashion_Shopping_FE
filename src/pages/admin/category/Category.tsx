@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import MyTable from '../../../components/MyTable';
 import MyClickable from '../../../components/MyClickable';
 import { FaRegEdit } from 'react-icons/fa';
@@ -26,7 +26,7 @@ const App: React.FC = () => {
         limit: itemsPerPage,
         keyword: debouncedKeyword,
     });
-    const columns = [
+    const columns = useMemo(() => [
         {
             title: 'Id',
             key: 'id',
@@ -82,7 +82,7 @@ const App: React.FC = () => {
                 </div>
             ),
         },
-    ];
+    ], [])
     return (
         <div className='flex gap-[10px]'>
             <div className='flex-[2] gap-[10px] flex flex-col'>
