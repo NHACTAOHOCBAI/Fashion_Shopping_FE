@@ -43,4 +43,8 @@ const updateCategory = async (data: {
     });
     return res;
 };
-export { getCategories, createCategory, updateCategory }
+const deleteCategory = async (data: { id: number }) => {
+    const res = await axios.delete(`/categories/${data.id}`)
+    return res
+}
+export { getCategories, createCategory, updateCategory, deleteCategory }
