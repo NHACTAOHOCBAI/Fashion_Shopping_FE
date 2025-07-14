@@ -1,9 +1,9 @@
 interface Category {
-    id: string;
+    id: number;
     name: string;
     parentId?: number;
-    parent?: [];
-    subcategories?: Category[]
+    parent?: Category;
+    subCategories?: Category[]
     imageUrl?: string // Optional, for hierarchical categories
     description?: string;
     createdAt: Date;

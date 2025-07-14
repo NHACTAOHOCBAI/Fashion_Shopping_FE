@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router";
-import Category from "../pages/admin/category/Category";
 import AdminLayout from "../layouts/admin_layouts/AdminLayout";
-import Dashboard from "../pages/admin/dashboard/Dashboard";
+import { lazy, Suspense } from "react";
+const Dashboard = lazy(() => import('../pages/admin/dashboard/Dashboard'));
+const Category = lazy(() => import('../pages/admin/category/Category'));
 const router = createBrowserRouter([
     {
         path: "/admin",
@@ -9,13 +10,22 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "dashboard",
-                element: <Dashboard /> // Placeholder for Category component
+                element: (
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Dashboard />
+                    </Suspense>
+                )
             },
             {
                 path: "categories",
-                element: <Category /> // Placeholder for Category component
+                element: (
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Category />
+                    </Suspense>
+                )
             }
         ]
-    },
+    }
+
 ]);
 export default router

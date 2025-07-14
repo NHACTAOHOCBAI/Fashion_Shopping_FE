@@ -1,32 +1,48 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import MyTable from '../../../components/MyTable';
 import MyClickable from '../../../components/MyClickable';
 import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { Input } from 'antd';
+import { Input, message } from 'antd';
 import { Search } from 'lucide-react';
 import NewCategory from './NewCategory';
-import { useCategories } from '../../../hooks/useCategory';
+import { useCategories, useDeleteCategory, useSelectCategory } from '../../../hooks/useCategory';
 import { formatDate } from '../../../utils/formatTime';
-import { useDebounce } from '../../../hooks/useDebounce';
+import UpdateCategory from './UpdateCategory';
+import useOpenModal from '../../../hooks/useOpenModal';
+import usePaginationSearch from '../../../hooks/usePaginationSearch';
+import DetailCategory from './DetailCategory';
+import MyPopConfirm from '../../../components/MyPopconfirm';
 const itemsPerPage = 4;
-const App: React.FC = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [keyword, setKeyword] = useState('');
-    // ✅ Debounced values
-    const debouncedKeyword = useDebounce(keyword, 300);
-    const debouncedPage = useDebounce(currentPage, 300);
-    const { data: categoriesData, isLoading } = useCategories({
+const Categories: React.FC = () => {
+    const [messageApi, contextHolder] = message.useMessage();
+    const { data: updatedCategory, isModalOpen: isUpdateOpen, openModal: openUpdateModal, closeModal: closeUpdateModal } = useOpenModal<Category>()
+    const { data: detailCategory, isModalOpen: isDetailOpen, openModal: openDetailModal, closeModal: closeDetailModal } = useOpenModal<Category>()
+    //
+    const { currentPage, setCurrentPage, keyword, setKeyword, debouncedKeyword, debouncedPage } = usePaginationSearch()
+    const { data: categoriesData, isPending } = useCategories({
         page: debouncedPage,
         limit: itemsPerPage,
         keyword: debouncedKeyword,
     });
-    const columns = [
+    const { mutate: deleteCategory, isPending: isDeletePending } = useDeleteCategory()
+    const handleDelete = useCallback((id: number) => {
+        deleteCategory({ id: id }, {
+            onSuccess: () => {
+                messageApi.success("Delete categories success")
+            },
+            onError: () => {
+                messageApi.error("Delete categories failed")
+            },
+        },)
+    }, [deleteCategory, messageApi])
+    const { data: categoryOpt } = useSelectCategory()
+    const columns = useMemo(() => [
         {
             title: 'Id',
             key: 'id',
             render: (_: any, record: Category) => (
-                <p className="text-accent-pinkRed">
+                <p className="text-accent-pinkRed cursor-pointer" onClick={() => openDetailModal(record)} >
                     {`#${record.id}`}
                 </p>
             )
@@ -34,9 +50,11 @@ const App: React.FC = () => {
         {
             title: 'Image',
             key: 'image',
-            render: (_: any, record: Category) => (
-                <img className='rounded object-cover size-[50px] bg-black' src={record.imageUrl} />
-            )
+            render: (_: any, record: Category) => {
+                if (record.imageUrl)
+                    return <img className='rounded object-cover size-[50px] bg-black' src={record.imageUrl} />
+                return <div className='rounded object-cover size-[50px] bg-background-gray flex justify-center items-center text-center'> No Image</div>
+            }
         },
         { title: 'Name', dataIndex: 'name', key: 'name' },
         {
@@ -60,48 +78,68 @@ const App: React.FC = () => {
         {
             title: 'Action',
             key: 'action',
-            render: () => (
+            render: (_: any, record: Category) => (
                 <div className="flex rounded-lg border overflow-hidden bg-background-gray items-center justify-evenly w-[70px] h-[30px]">
-                    <MyClickable>
+                    <MyClickable onClick={() => {
+                        openUpdateModal(record)
+                    }}>
                         <FaRegEdit />
                     </MyClickable>
                     <div className='border h-full'></div>
-                    <MyClickable >
+                    <MyPopConfirm
+                        title="Delete the task"
+                        description="Are you sure to delete this task?"
+                        okText="Yes"
+                        cancelText="No"
+                        onConfirm={() => handleDelete(record.id)}
+                    >
                         <RiDeleteBin6Line className='text-[#EF3826]' />
-                    </MyClickable>
+                    </MyPopConfirm>
                 </div>
             ),
         },
-    ];
-
+    ], [openUpdateModal, openDetailModal, handleDelete])
     return (
-        <div className='flex gap-[10px]'>
-            <div className='flex-[2] gap-[10px] flex flex-col'>
-                <Input
-                    value={keyword}
-                    onChange={(e) => {
-                        setKeyword(e.target.value);
-                        setCurrentPage(1); // reset page khi search
-                    }}
-                    prefix={<Search size={20} strokeWidth={1} />}
-                    className='rounded-[14px] p-2 w-[60%] min-w-[200px]'
-                    placeholder='Search...'
+        <>
+            {contextHolder}
+            <div className='flex gap-[10px]'>
+                <div className='flex-[2] gap-[10px] flex flex-col'>
+                    <Input
+                        value={keyword}
+                        onChange={(e) => {
+                            setKeyword(e.target.value);
+                            setCurrentPage(1); // reset page khi search
+                        }}
+                        prefix={<Search size={20} strokeWidth={1} />}
+                        className='rounded-[14px] p-2 w-[60%] min-w-[200px]'
+                        placeholder='Search...'
+                    />
+                    <MyTable
+                        dataSource={categoriesData?.categories || []}
+                        columns={columns}
+                        totalItems={categoriesData?.pagination.total || 0}
+                        currentPage={currentPage}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={setCurrentPage}
+                        isLoading={isPending}
+                    />
+                </div>
+                <div className='flex-[1]'>
+                    <NewCategory categoryOpt={categoryOpt} />
+                </div>
+                <UpdateCategory
+                    categoryOpt={categoryOpt}
+                    closeUpdateModal={closeUpdateModal}
+                    isUpdateOpen={isUpdateOpen}
+                    updatedCategory={updatedCategory}
                 />
-                <MyTable
-                    dataSource={categoriesData?.categories || []}
-                    columns={columns}
-                    totalItems={categoriesData?.pagination.total || 0}
-                    currentPage={currentPage}
-                    itemsPerPage={itemsPerPage}
-                    onPageChange={setCurrentPage}
-                    isLoading={isLoading}
+                <DetailCategory
+                    isDetailOpen={isDetailOpen}
+                    detailCategory={detailCategory}
+                    closeDetailModal={closeDetailModal}
                 />
             </div>
-            <div className='flex-[1]'>
-                <NewCategory />
-            </div>
-        </div>
+        </>
     );
 };
-
-export default App;
+export default Categories;

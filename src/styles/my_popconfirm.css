@@ -1,0 +1,3 @@
+.no-shadow-popconfirm .ant-popover-inner {
+  box-shadow: none !important;
+}

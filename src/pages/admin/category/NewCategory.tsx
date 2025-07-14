@@ -3,15 +3,21 @@ import { Button, Form, Input, message } from 'antd';
 import MySelect from '../../../components/MySelect';
 import TextArea from 'antd/es/input/TextArea';
 import MyUploadFile from '../../../components/MyUploadFile';
-import { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { SquarePlus } from 'lucide-react';
 import { useCreateCategory } from '../../../hooks/useCategory';
-const NewCategory = () => {
+interface NewCategoryProps {
+    categoryOpt: {
+        value: number;
+        label: string;
+    }[] | undefined
+}
+const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
     const { mutate: createCategory, isPending } = useCreateCategory();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage();
-    const onFinish: FormProps<Category>['onFinish'] = (values) => {
+    const onFinish: FormProps<Category>['onFinish'] = useCallback((values: Category) => {
         createCategory({
             name: values.name,
             description: values.description,
@@ -23,9 +29,15 @@ const NewCategory = () => {
                     form.resetFields();
                     messageApi.success("Create categories success")
                 },
-            }
+                onError: () => {
+                    messageApi.error("Create categories failed")
+                },
+            },
+
         )
-    };
+    }, [createCategory, fileList, form, messageApi])
+    // thuc chat deps chi co fileList
+
     return (
         <>
             {contextHolder}
@@ -49,13 +61,10 @@ const NewCategory = () => {
                         name="parentId"
                     >
                         <MySelect
+                            showSearch
                             disabled={isPending}
                             placeholder="Bags..."
-                            options={[
-                                { value: 1, label: 'Apple' },
-                                { value: 2, label: 'Banana' },
-                                { value: undefined, label: 'No parent' },
-                            ]}
+                            options={categoryOpt}
                         />
                     </Form.Item>
                     <Form.Item<Category>
@@ -81,4 +90,4 @@ const NewCategory = () => {
     )
 }
 
-export default NewCategory;
+export default React.memo(NewCategory) 

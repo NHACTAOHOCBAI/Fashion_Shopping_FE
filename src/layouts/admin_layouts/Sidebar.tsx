@@ -14,6 +14,7 @@ interface SidebarProps {
     }[];
 }
 const Sidebar = ({ isCollapsed, activeItem, items }: SidebarProps) => {
+    console.log("sidebar")
     return (
         <div className={`bg-white flex flex-col gap-[6px] shadow-md border-r-2  transition-all duration-[400ms] ${isCollapsed ? 'w-16' : 'w-[190px]'}`}>
             {
