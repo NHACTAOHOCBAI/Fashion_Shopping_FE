@@ -1,58 +1,58 @@
-import React, { useCallback, useMemo } from 'react';
-import MyTable from '../../../components/MyTable';
-import MyClickable from '../../../components/MyClickable';
-import { FaRegEdit } from 'react-icons/fa';
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import { Input, message } from 'antd';
-import { Search } from 'lucide-react';
-import NewCategory from './NewCategory';
-import { useCategories, useDeleteCategory, useSelectCategory } from '../../../hooks/useCategory';
-import { formatDate } from '../../../utils/formatTime';
-import UpdateCategory from './UpdateCategory';
-import useOpenModal from '../../../hooks/useOpenModal';
-import usePaginationSearch from '../../../hooks/usePaginationSearch';
-import DetailCategory from './DetailCategory';
-import MyPopConfirm from '../../../components/MyPopconfirm';
+import { Input, message } from "antd";
+import useOpenModal from "../../../hooks/useOpenModal";
+import usePaginationSearch from "../../../hooks/usePaginationSearch";
+import { useCallback, useMemo } from "react";
+import { useBrands, useDeleteBrand } from "../../../hooks/useBrand";
+import { formatDate } from "../../../utils/formatTime";
+import MyClickable from "../../../components/MyClickable";
+import { FaRegEdit } from "react-icons/fa";
+import MyPopConfirm from "../../../components/MyPopconfirm";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import MyTable from "../../../components/MyTable";
+import NewBrand from "./NewBrand";
+import UpdateBrand from "./UpdateBrand";
+import DetailBrand from "./DetailBrand";
+import { Search } from "lucide-react";
+
 const itemsPerPage = 4;
-const Categories: React.FC = () => {
+const Brands = () => {
     const [messageApi, contextHolder] = message.useMessage();
-    const { data: updatedCategory, isModalOpen: isUpdateOpen, openModal: openUpdateModal, closeModal: closeUpdateModal } = useOpenModal<Category>()
-    const { data: detailCategory, isModalOpen: isDetailOpen, openModal: openDetailModal, closeModal: closeDetailModal } = useOpenModal<Category>()
+    const { data: updatedBrand, isModalOpen: isUpdateOpen, openModal: openUpdateModal, closeModal: closeUpdateModal } = useOpenModal<Brand>()
+    const { data: detailBrand, isModalOpen: isDetailOpen, openModal: openDetailModal, closeModal: closeDetailModal } = useOpenModal<Brand>()
     //
     const { currentPage, setCurrentPage, keyword, setKeyword, debouncedKeyword, debouncedPage } = usePaginationSearch()
-    const { data: categoriesData, isPending } = useCategories({
+    const { data: brandsData, isPending } = useBrands({
         page: debouncedPage,
         limit: itemsPerPage,
         keyword: debouncedKeyword,
     });
-    const { mutate: deleteCategory } = useDeleteCategory()
+    const { mutate: deleteBrand } = useDeleteBrand()
     const handleDelete = useCallback((id: number) => {
-        deleteCategory({ id: id }, {
+        deleteBrand({ id: id }, {
             onSuccess: () => {
-                messageApi.success("Delete categories success")
+                messageApi.success("Delete brands success")
             },
             onError: () => {
-                messageApi.error("Delete categories failed")
+                messageApi.error("Delete brands failed")
             },
         },)
-    }, [deleteCategory, messageApi])
-    const { data: categoryOpt } = useSelectCategory()
+    }, [deleteBrand, messageApi])
     const columns = useMemo(() => [
         {
             title: 'Id',
             key: 'id',
-            render: (_: any, record: Category) => (
+            render: (_: any, record: Brand) => (
                 <p className="text-accent-pinkRed cursor-pointer" onClick={() => openDetailModal(record)} >
                     {`#${record.id}`}
                 </p>
             )
         },
         {
-            title: 'Image',
-            key: 'image',
-            render: (_: any, record: Category) => {
-                if (record.imageUrl)
-                    return <img className='rounded object-cover size-[50px] bg-black' src={record.imageUrl} />
+            title: 'Logo',
+            key: 'logo',
+            render: (_: any, record: Brand) => {
+                if (record.logoUrl)
+                    return <img className='rounded object-cover size-[50px] bg-black' src={record.logoUrl} />
                 return <div className='rounded object-cover size-[50px] bg-background-gray flex justify-center items-center text-center'> No Image</div>
             }
         },
@@ -60,7 +60,7 @@ const Categories: React.FC = () => {
         {
             title: 'Created at',
             key: 'id',
-            render: (_: any, record: Category) => (
+            render: (_: any, record: Brand) => (
                 <p >
                     {formatDate(record.createdAt)}
                 </p>
@@ -69,7 +69,7 @@ const Categories: React.FC = () => {
         {
             title: 'Updated at',
             key: 'id',
-            render: (_: any, record: Category) => (
+            render: (_: any, record: Brand) => (
                 <p>
                     {formatDate(record.updatedAt)}
                 </p>
@@ -78,7 +78,7 @@ const Categories: React.FC = () => {
         {
             title: 'Action',
             key: 'action',
-            render: (_: any, record: Category) => (
+            render: (_: any, record: Brand) => (
                 <div className="flex rounded-lg border overflow-hidden bg-background-gray items-center justify-evenly w-[70px] h-[30px]">
                     <MyClickable onClick={() => {
                         openUpdateModal(record)
@@ -115,9 +115,9 @@ const Categories: React.FC = () => {
                         placeholder='Search...'
                     />
                     <MyTable
-                        dataSource={categoriesData?.categories || []}
+                        dataSource={brandsData?.brands || []}
                         columns={columns}
-                        totalItems={categoriesData?.pagination.total || 0}
+                        totalItems={brandsData?.pagination.total || 0}
                         currentPage={currentPage}
                         itemsPerPage={itemsPerPage}
                         onPageChange={setCurrentPage}
@@ -125,21 +125,20 @@ const Categories: React.FC = () => {
                     />
                 </div>
                 <div className='flex-[1]'>
-                    <NewCategory categoryOpt={categoryOpt} />
+                    <NewBrand />
                 </div>
-                <UpdateCategory
-                    categoryOpt={categoryOpt}
+                <UpdateBrand
                     closeUpdateModal={closeUpdateModal}
                     isUpdateOpen={isUpdateOpen}
-                    updatedCategory={updatedCategory}
+                    updatedBrand={updatedBrand}
                 />
-                <DetailCategory
+                <DetailBrand
                     isDetailOpen={isDetailOpen}
-                    detailCategory={detailCategory}
+                    detailBrand={detailBrand}
                     closeDetailModal={closeDetailModal}
                 />
             </div>
         </>
     );
 };
-export default Categories;
+export default Brands;
