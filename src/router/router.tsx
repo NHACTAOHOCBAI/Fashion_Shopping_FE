@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import AdminLayout from "../layouts/admin_layouts/AdminLayout";
 import { lazy, Suspense } from "react";
+import Login from "../pages/auth/Login";
 const Dashboard = lazy(() => import('../pages/admin/dashboard/Dashboard'));
 const Category = lazy(() => import('../pages/admin/category/Category'));
 const Brand = lazy(() => import('../pages/admin/brand/Brand'));
@@ -33,7 +34,11 @@ const router = createBrowserRouter([
                     </Suspense>
                 )
             }
-        ]
+        ],
+    },
+    {
+        path: "/login",
+        element: <Login />,
     }
 
 ]);
