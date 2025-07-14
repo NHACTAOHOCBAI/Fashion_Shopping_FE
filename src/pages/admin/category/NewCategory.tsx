@@ -6,7 +6,13 @@ import MyUploadFile from '../../../components/MyUploadFile';
 import React, { useCallback, useState } from 'react';
 import { SquarePlus } from 'lucide-react';
 import { useCreateCategory } from '../../../hooks/useCategory';
-const NewCategory = () => {
+interface NewCategoryProps {
+    categoryOpt: {
+        value: number;
+        label: string;
+    }[] | undefined
+}
+const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
     const { mutate: createCategory, isPending } = useCreateCategory();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [form] = Form.useForm()
@@ -55,13 +61,10 @@ const NewCategory = () => {
                         name="parentId"
                     >
                         <MySelect
+                            showSearch
                             disabled={isPending}
                             placeholder="Bags..."
-                            options={[
-                                { value: 1, label: 'Apple' },
-                                { value: 2, label: 'Banana' },
-                                { value: undefined, label: 'No parent' },
-                            ]}
+                            options={categoryOpt}
                         />
                     </Form.Item>
                     <Form.Item<Category>

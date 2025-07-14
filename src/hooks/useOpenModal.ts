@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useUpdateModal = <T,>() => {
+const useOpenModal = <T,>() => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState<T>()
     const openModal = (record: T) => {
@@ -13,4 +13,4 @@ const useUpdateModal = <T,>() => {
     }
     return { openModal, closeModal, data, isModalOpen }
 }
-export default useUpdateModal
+export default useOpenModal

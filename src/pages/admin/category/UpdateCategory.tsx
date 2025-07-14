@@ -9,8 +9,12 @@ interface UpdateCategoryProps {
     isUpdateOpen: boolean,
     updatedCategory: Category | undefined,
     closeUpdateModal: () => void
+    categoryOpt: {
+        value: number;
+        label: string;
+    }[] | undefined
 }
-const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory }: UpdateCategoryProps) => {
+const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categoryOpt }: UpdateCategoryProps) => {
     const { mutate: updateCategory, isPending } = useUpdateCategory();
     const [image, setImage] = useState<File | undefined>(undefined);
     const [form] = Form.useForm()
@@ -75,13 +79,9 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory }: Upd
                         name="parentId"
                     >
                         <MySelect
-
+                            showSearch
                             placeholder="Bags..."
-                            options={[
-                                { value: 1, label: 'Apple' },
-                                { value: 2, label: 'Banana' },
-                                { value: undefined, label: 'No parent' },
-                            ]}
+                            options={categoryOpt}
                         />
                     </Form.Item>
                     <Form.Item<Category>

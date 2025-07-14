@@ -14,6 +14,7 @@ export const useCreateCategory = () => {
         mutationFn: createCategory,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['categories'] });
+            queryClient.invalidateQueries({ queryKey: ['select categories'] });
         },
     });
 };
@@ -23,6 +24,23 @@ export const useUpdateCategory = () => {
         mutationFn: updateCategory,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['categories'] });
+            queryClient.invalidateQueries({ queryKey: ['select categories'] });
         },
     });
 };
+export const useSelectCategory = () => useQuery({
+    queryKey: ['select categories'],
+    queryFn: async () => {
+        const categories = (await getCategories()).categories;
+        const selectOpt = categories.map((category) => {
+            return {
+                value: category.id,
+                label: category.name
+            }
+        })
+        return [
+            { value: 0, label: "No parent" },
+            ...selectOpt
+        ]
+    }
+});

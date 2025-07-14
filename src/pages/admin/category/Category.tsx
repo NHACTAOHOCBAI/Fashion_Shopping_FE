@@ -6,17 +6,22 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { Input } from 'antd';
 import { Search } from 'lucide-react';
 import NewCategory from './NewCategory';
-import { useCategories } from '../../../hooks/useCategory';
+import { useCategories, useSelectCategory } from '../../../hooks/useCategory';
 import { formatDate } from '../../../utils/formatTime';
 import UpdateCategory from './UpdateCategory';
-import useUpdateModal from '../../../hooks/useUpdateModal';
+import useOpenModal from '../../../hooks/useOpenModal';
 import usePaginationSearch from '../../../hooks/usePaginationSearch';
+import DetailCategory from './DetailCategory';
 const itemsPerPage = 4;
 const Categories: React.FC = () => {
     const {
         data: updatedCategory, isModalOpen: isUpdateOpen,
         openModal: openUpdateModal, closeModal: closeUpdateModal
-    } = useUpdateModal<Category>()
+    } = useOpenModal<Category>()
+    const {
+        data: detailCategory, isModalOpen: isDetailOpen,
+        openModal: openDetailModal, closeModal: closeDetailModal
+    } = useOpenModal<Category>()
     //
     const { currentPage, setCurrentPage, keyword, setKeyword, debouncedKeyword, debouncedPage } = usePaginationSearch()
     const { data: categoriesData, isLoading } = useCategories({
@@ -24,12 +29,13 @@ const Categories: React.FC = () => {
         limit: itemsPerPage,
         keyword: debouncedKeyword,
     });
+    const { data: categoryOpt } = useSelectCategory()
     const columns = useMemo(() => [
         {
             title: 'Id',
             key: 'id',
             render: (_: any, record: Category) => (
-                <p className="text-accent-pinkRed">
+                <p className="text-accent-pinkRed cursor-pointer" onClick={() => openDetailModal(record)} >
                     {`#${record.id}`}
                 </p>
             )
@@ -79,8 +85,7 @@ const Categories: React.FC = () => {
                 </div>
             ),
         },
-    ], [openUpdateModal])
-
+    ], [openUpdateModal, openDetailModal])
     return (
         <div className='flex gap-[10px]'>
             <div className='flex-[2] gap-[10px] flex flex-col'>
@@ -105,12 +110,18 @@ const Categories: React.FC = () => {
                 />
             </div>
             <div className='flex-[1]'>
-                <NewCategory />
+                <NewCategory categoryOpt={categoryOpt} />
             </div>
             <UpdateCategory
+                categoryOpt={categoryOpt}
                 closeUpdateModal={closeUpdateModal}
                 isUpdateOpen={isUpdateOpen}
                 updatedCategory={updatedCategory}
+            />
+            <DetailCategory
+                isDetailOpen={isDetailOpen}
+                detailCategory={detailCategory}
+                closeDetailModal={closeDetailModal}
             />
         </div>
     );
