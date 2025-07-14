@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package } from 'lucide-react';
+import { Album, LayoutDashboard, Package } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import Sidebar from './Sidebar';
@@ -14,28 +14,23 @@ const AdminLayout = () => {
             items: [
                 {
                     key: 'dashboard',
-                    icon: <LayoutDashboard strokeWidth={1} />,
+                    icon: <LayoutDashboard />,
                     name: <Link to='/admin/dashboard'>Dashboard</Link>,
                 },
-                {
-                    key: 'categories',
-                    icon: <Package strokeWidth={1} />,
-                    name: <Link to='/admin/categories'>Categories</Link>,
-                }
             ]
         },
         {
             groupName: 'management',
             items: [
                 {
-                    key: 'brands',
-                    icon: <LayoutDashboard strokeWidth={1} />,
-                    name: <Link to='/admin/brands'>Brands</Link>,
+                    key: 'categories',
+                    icon: <Package />,
+                    name: <Link to='/admin/categories'>Categories</Link>,
                 },
                 {
-                    key: 'products',
-                    icon: <Package strokeWidth={1} />,
-                    name: <Link to='/admin/products'>Products</Link>,
+                    key: 'brands',
+                    icon: <Album />,
+                    name: <Link to='/admin/brands'>Brands</Link>,
                 }
             ]
         }
