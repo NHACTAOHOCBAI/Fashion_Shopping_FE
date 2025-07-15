@@ -17,8 +17,18 @@ axiosInstance.interceptors.request.use(
         }
         return config;
     },
-    (error) => {
-        return Promise.reject(error);
+    async (error) => {
+        if (error.response) {
+            // Lỗi có phản hồi từ server
+            const message = error.response.data?.message || 'Unknown error from server';
+            return Promise.reject(new Error(message)); // ném lỗi với message rõ ràng
+        } else if (error.request) {
+            // Request được gửi đi nhưng không có phản hồi
+            return Promise.reject(new Error('No response from server'));
+        } else {
+            // Lỗi khác (cấu hình hoặc Axios lỗi)
+            return Promise.reject(new Error(error.message || 'Unexpected error'));
+        }
     }
 );
 
@@ -26,13 +36,17 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response.data.data,
     async (error) => {
-        // Ví dụ xử lý lỗi 401 - unauthorized
-        if (error.response?.status === 401) {
-            console.warn('Unauthorized! Redirecting to login...');
-            // Clear token, redirect, refresh token v.v...
+        if (error.response) {
+            // Lỗi có phản hồi từ server
+            const message = error.response.data?.message || 'Unknown error from server';
+            return Promise.reject(new Error(message)); // ném lỗi với message rõ ràng
+        } else if (error.request) {
+            // Request được gửi đi nhưng không có phản hồi
+            return Promise.reject(new Error('No response from server'));
+        } else {
+            // Lỗi khác (cấu hình hoặc Axios lỗi)
+            return Promise.reject(new Error(error.message || 'Unexpected error'));
         }
-
-        return Promise.reject(error);
     }
 );
 
