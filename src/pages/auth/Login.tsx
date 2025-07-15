@@ -67,7 +67,7 @@ const Login = () => {
 
                         <Form.Item label={null} className="flex justify-center">
                             <Button loading={isPending} type="primary" className="text-[14px] p-[20px] w-[300px] font-medium rounded-xl" htmlType="submit">
-                                Sign in
+                                Sign In
                             </Button>
                         </Form.Item>
                         <div className="text-[14px]">
