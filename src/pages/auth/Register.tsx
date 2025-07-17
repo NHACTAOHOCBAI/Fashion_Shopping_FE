@@ -1,12 +1,7 @@
 import { Button, Form, Input, message } from "antd"
 import { useRegister } from "../../hooks/useAuth"
 import { Link, useNavigate } from "react-router"
-import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { increment } from "../../redux/counterSlice"
 const Register = () => {
-    const count = useAppSelector(state => state.counter.value)
-    const dispatch = useAppDispatch()
-
     const navigate = useNavigate()
     const [form] = Form.useForm()
     const { mutate: register, isPending } = useRegister()
@@ -31,8 +26,6 @@ const Register = () => {
                 className=" h-screen bg-no-repeat bg-cover bg-center flex justify-center items-center"
                 style={{ backgroundImage: `url("/auth_background.png")` }}
             >
-                <Button onClick={() => dispatch(increment())}>+</Button>
-                {count}
                 <div className="bg-white p-[50px] rounded-3xl">
                     <h1 className="text-text-heading font-bold text-[28px] text-center">Create an Account</h1>
                     <h2 className="text-[14px] text-center mb-[24px]">Please sign up here</h2>

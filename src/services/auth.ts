@@ -7,4 +7,8 @@ const register = async (data: { email: string, password: string, name: string })
     const res = await axios.post('/auth/register', data)
     return res
 }
-export { login, register }
+const verifyEmail = async (data: { token: string }) => {
+    const res = await axios.post('/auth/verify-email', data);
+    return res;
+}
+export { login, register, verifyEmail }
