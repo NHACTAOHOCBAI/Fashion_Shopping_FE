@@ -1,6 +1,6 @@
 import axios from '../configs/AxiosConfig';
 const login = async (data: { email: string, password: string }) => {
-    const res = await axios.post('/auth/login', data)
+    const res = await axios.post('/auth/login', data) as { user: User, accessToken: string }
     return res
 }
 const register = async (data: { email: string, password: string, name: string }) => {

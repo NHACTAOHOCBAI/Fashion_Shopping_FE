@@ -2,17 +2,20 @@ import { Button, Checkbox, Form, Input, message } from "antd"
 import { useLogin } from "../../hooks/useAuth"
 import { Link, useNavigate } from "react-router"
 import useRememberMe from "../../hooks/useRememberMe"
+import { useAuth } from "../../context/AuthProvider"
 const Login = () => {
+    const { login: authLogin } = useAuth();
     const navigate = useNavigate()
     const [form] = Form.useForm()
     const { rememberAccount } = useRememberMe({ form })
-    const { mutate: login, isPending } = useLogin()
     const [messageApi, contextHolder] = message.useMessage();
+    const { mutate: login, isPending } = useLogin()
     const handleLogin = async (values: { email: string, password: string, remember: boolean }) => {
-        rememberAccount(values)
         login({ email: values.email, password: values.password },
             {
-                onSuccess: () => {
+                onSuccess: (data: { user: User, accessToken: string }) => {
+                    rememberAccount(values)
+                    authLogin(data.user, data.accessToken)
                     form.resetFields();
                     messageApi.success("Login success")
                     navigate('/admin/categories')
