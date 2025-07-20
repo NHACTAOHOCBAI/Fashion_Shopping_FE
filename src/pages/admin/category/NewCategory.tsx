@@ -42,7 +42,7 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
         <>
             {contextHolder}
             <div className='bg-white p-[10px] rounded-lg border'>
-                <h2 className='text-accent-pinkRed font-bold text-[16px] mb-[5px] flex gap-[10px]'><SquarePlus strokeWidth={1.75} /> Add New Category</h2>
+                <h2 className='text-accent-pinkRed font-bold text-[16px] mb-[5px] flex gap-[10px]'>Add New Category</h2>
                 <Form
                     form={form}
                     layout='vertical'
