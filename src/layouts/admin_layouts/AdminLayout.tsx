@@ -14,7 +14,7 @@ const AdminLayout = () => {
             items: [
                 {
                     key: 'dashboard',
-                    icon: <LayoutDashboard />,
+                    icon: <LayoutDashboard strokeWidth={1.8} />,
                     name: <Link to='/admin/dashboard'>Dashboard</Link>,
                 },
             ]
@@ -24,12 +24,12 @@ const AdminLayout = () => {
             items: [
                 {
                     key: 'categories',
-                    icon: <Package />,
+                    icon: <Package strokeWidth={1.8} />,
                     name: <Link to='/admin/categories'>Categories</Link>,
                 },
                 {
                     key: 'brands',
-                    icon: <Album />,
+                    icon: <Album strokeWidth={1.8} />,
                     name: <Link to='/admin/brands'>Brands</Link>,
                 }
             ]

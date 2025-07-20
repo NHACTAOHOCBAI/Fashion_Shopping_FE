@@ -8,7 +8,7 @@ const AntdConfigProvider = ({ children }: any) => {
                     colorPrimary: '#FF6B6B', // red-500FF6B6B
                     colorPrimaryHover: '#ff8d8d', // red-600 (hover)
                     colorPrimaryActive: '#FF6B6B', // red-700 (focus)
-                    fontFamily: 'Roboto,sans-serif',
+                    fontFamily: 'Nunito Sans,sans-serif',
                     colorText: '#666666',
                     fontSize: 12,
                 },

@@ -35,9 +35,9 @@ export default {
         },
       },
       fontFamily: {
-        heading: ['Montserrat'], // dùng cho title
+        heading: ['Nunito Sans'], // dùng cho title
         // Gán font Roboto làm mặc định cho sans
-        sans: ['Roboto', ...defaultTheme.fontFamily.sans],          // dùng cho nội dung
+        sans: ['Nunito Sans', ...defaultTheme.fontFamily.sans],          // dùng cho nội dung
       }
     },
   },
