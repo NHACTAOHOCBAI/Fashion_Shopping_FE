@@ -5,8 +5,8 @@ interface MyFieldProps {
 }
 const MyField = ({ title, value, layout = "horizontal" }: MyFieldProps) => {
     return (
-        <div className={`flex flex-wrap ${layout === "vertical" ? "flex-row " : "gap-x-2"}`}>
-            <p className="font-medium uppercase whitespace-nowrap">{title} : </p>
+        <div className={`flex flex-wrap gap-x-2 ${layout === "vertical" ? "flex-row " : ""}`}>
+            <p className="font-medium uppercase whitespace-nowrap text-black">{title} : </p>
             <p className="break-all">{value || "No"}</p>
         </div>
     );

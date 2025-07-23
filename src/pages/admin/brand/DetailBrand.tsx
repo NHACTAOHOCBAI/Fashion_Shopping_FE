@@ -19,7 +19,7 @@ const DetailBrand = ({ isDetailOpen, detailBrand, closeDetailModal }: DetailBran
             <div className="flex flex-col gap-2">
                 <Image
                     src={detailBrand?.logoUrl}
-                    style={{ width: 400, height: 300, objectFit: "cover" }} // borderRadius: 0 để tránh bo góc
+                    style={{ aspectRatio: 5 / 3, objectFit: "contain" }}  // borderRadius: 0 để tránh bo góc
                     className=" rounded"
                 />
                 <MyField
@@ -36,6 +36,10 @@ const DetailBrand = ({ isDetailOpen, detailBrand, closeDetailModal }: DetailBran
                         value={formatDate(detailBrand?.updatedAt as Date)}
                     />
                 </div>
+                <MyField
+                    title="Description"
+                    value={detailBrand?.description}
+                />
                 <MyField
                     layout="vertical"
                     title="Description"

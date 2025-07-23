@@ -39,21 +39,22 @@ const AdminLayout = () => {
         setIsCollapsed(!isCollapsed);
     }, [isCollapsed])
     return (
-        <div className="flex h-screen bg-background-gray">
+        <div className="flex h-screen bg-background-gray overflow-hidden">
             {/* Sidebar */}
             <Sidebar
                 isCollapsed={isCollapsed}
                 activeItem={endpoints}
                 items={fakedata}
             />
-            <div className="flex-1">
+
+            <div className="flex flex-col flex-1 h-full">
                 {/* Header */}
                 <Header toggleSidebar={toggleSidebar} />
-                {/* Main Content */}
-                <div className="flex-1 p-[20px]  overflow-auto max-h-[670px]">
+
+                {/* Main Content (scrollable area) */}
+                <div className="flex-1 overflow-auto p-[20px]">
                     <Outlet />
                 </div>
-
             </div>
         </div>
     );

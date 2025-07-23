@@ -2,13 +2,12 @@ import type { FormProps, UploadFile } from 'antd';
 import { Button, Form, Input, message } from 'antd';
 import MySelect from '../../../components/MySelect';
 import TextArea from 'antd/es/input/TextArea';
-import MyUploadFile from '../../../components/MyUploadFile';
 import React, { useCallback, useState } from 'react';
-import { SquarePlus } from 'lucide-react';
 import { useCreateCategory } from '../../../hooks/useCategory';
+import MyUploadFile from '../../../components/MyUploadFile';
 interface NewCategoryProps {
     categoryOpt: {
-        value: number;
+        value: number | undefined;
         label: string;
     }[] | undefined
 }
@@ -29,8 +28,8 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
                     form.resetFields();
                     messageApi.success("Create categories success")
                 },
-                onError: () => {
-                    messageApi.error("Create categories failed")
+                onError: (error) => {
+                    messageApi.error(error.message)
                 },
             },
 
@@ -41,13 +40,14 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
     return (
         <>
             {contextHolder}
-            <div className='bg-white p-[10px] rounded-lg border'>
-                <h2 className='text-accent-pinkRed font-bold text-[16px] mb-[5px] flex gap-[10px]'>Add New Category</h2>
+            <div className='bg-white p-[14px] rounded-lg border'>
+                <h2 className=' font-medium text-[14px] mb-[5px] flex gap-[10px]'>New Category</h2>
                 <Form
                     form={form}
                     layout='vertical'
                     initialValues={{ remember: true }}
                     onFinish={onFinish}
+
                 >
                     <Form.Item<Category>
                         label="Category Name : "
@@ -71,7 +71,12 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
                         label="Image : "
                         name="imageUrl"
                     >
-                        <MyUploadFile disabled={isPending} onFileListChange={setFileList} />
+                        <MyUploadFile
+                            width={"50%"}
+                            disabled={isPending}
+                            quantity={1}
+                            setFileList={setFileList}
+                            fileList={fileList} />
                     </Form.Item>
                     <Form.Item<Category>
                         label="Desciption : "
@@ -84,7 +89,7 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
                     </Form.Item>
 
                 </Form>
-                <Button loading={isPending} className='ml-auto block mt-auto' type="primary" onClick={() => form.submit()}>Create</Button>
+                <Button loading={isPending} className='ml-auto block mt-auto' type="primary" onClick={() => form.submit()}><div >Create</div></Button>
             </div>
         </>
     )

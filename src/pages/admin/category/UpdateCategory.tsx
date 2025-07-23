@@ -1,22 +1,23 @@
 
-import { Form, Input, message, Modal, type FormProps } from 'antd';
+import { Form, Input, message, Modal, type FormProps, type UploadFile } from 'antd';
 import MySelect from '../../../components/MySelect';
 import TextArea from 'antd/es/input/TextArea';
 import { useUpdateCategory } from '../../../hooks/useCategory';
-import { useCallback, useEffect, useState, memo } from 'react';
-import MyVisibleUpload from '../../../components/MyVisibileUpload';
+import { useCallback, useEffect, useState, memo, useMemo } from 'react';
+import MyUploadFile from '../../../components/MyUploadFile';
 interface UpdateCategoryProps {
     isUpdateOpen: boolean,
     updatedCategory: Category | undefined,
     closeUpdateModal: () => void
     categoryOpt: {
-        value: number;
+        value: number | undefined;
         label: string;
     }[] | undefined
 }
 const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categoryOpt }: UpdateCategoryProps) => {
+    categoryOpt = useMemo(() => categoryOpt?.filter((value) => value.value !== updatedCategory?.id), [categoryOpt, updatedCategory])
     const { mutate: updateCategory, isPending } = useUpdateCategory();
-    const [image, setImage] = useState<File | undefined>(undefined);
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage();
     const handleCancel = useCallback(() => {
@@ -29,7 +30,7 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
             id: updatedCategory?.id || 0,
             name: values.name,
             description: values.description,
-            image: image,
+            image: fileList[0].originFileObj,
             parentId: values.parentId,
         },
             {
@@ -37,12 +38,12 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
                     handleCancel();
                     messageApi.success("Update categories success");
                 },
-                onError: () => {
-                    messageApi.error("Update categories failed");
+                onError: (error) => {
+                    messageApi.error(error.message)
                 },
             }
         );
-    }, [updatedCategory, image, handleCancel, messageApi, updateCategory]);
+    }, [updatedCategory, fileList, handleCancel, messageApi, updateCategory]);
     // thuc chat deps chi co updatedCategory, image
     useEffect(() => {
         form.setFieldsValue({
@@ -60,6 +61,7 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
                 onOk={() => form.submit()}
                 onCancel={handleCancel}
                 loading={isPending}
+                okText="Update"
             >
                 <Form
                     form={form}
@@ -88,10 +90,12 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
                         label="Image : "
                         name="imageUrl"
                     >
-                        <MyVisibleUpload
-                            initialImageUrl={updatedCategory?.imageUrl}
-                            onChange={(file) => setImage(file)}
-                        />
+                        <MyUploadFile
+                            width={"50%"}
+                            disabled={isPending}
+                            quantity={1}
+                            setFileList={setFileList}
+                            fileList={fileList} />
                     </Form.Item>
                     <Form.Item<Category>
                         label="Desciption : "

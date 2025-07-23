@@ -37,7 +37,7 @@ const MyVisibleUpload: React.FC<Props> = ({ onChange, initialImageUrl, maxCount 
             onChange(file);
         }
 
-        setFileList(fileList.slice(-1)); // Chỉ giữ lại 1 file
+        setFileList(fileList); // Chỉ giữ lại 1 file
     };
 
     const handlePreview = async (file: UploadFile) => {
@@ -72,7 +72,7 @@ const MyVisibleUpload: React.FC<Props> = ({ onChange, initialImageUrl, maxCount 
                 onPreview={handlePreview}
                 maxCount={maxCount}
             >
-                {fileList.length >= 1 ? null : uploadButton}
+                {uploadButton}
             </Upload>
 
             {/* Preview full-screen */}

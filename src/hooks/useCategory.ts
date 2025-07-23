@@ -39,7 +39,7 @@ export const useSelectCategory = () => useQuery({
             }
         })
         return [
-            { value: 0, label: "No parent" },
+            { value: undefined, label: "No parent" },
             ...selectOpt
         ]
     }
