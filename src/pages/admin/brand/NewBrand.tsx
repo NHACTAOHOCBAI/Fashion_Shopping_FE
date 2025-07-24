@@ -1,10 +1,9 @@
 import type { FormProps, UploadFile } from 'antd';
 import { Button, Form, Input, message } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import MyUploadFile from '../../../components/MyUploadFile';
 import React, { useCallback, useState } from 'react';
-import { SquarePlus } from 'lucide-react';
 import { useCreateBrand } from '../../../hooks/useBrand';
+import MyUploadFile from '../../../components/MyUploadFile';
 const NewBrand = () => {
     const { mutate: createBrand, isPending } = useCreateBrand();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -14,15 +13,15 @@ const NewBrand = () => {
         createBrand({
             name: values.name,
             description: values.description,
-            logoUrl: fileList[0]?.originFileObj,
+            logo: fileList[0]?.originFileObj,
         },
             {
                 onSuccess: () => {
                     form.resetFields();
                     messageApi.success("Create brand success")
                 },
-                onError: () => {
-                    messageApi.error("Create brand failed")
+                onError: (error) => {
+                    messageApi.error(error.message)
                 },
             },
 
@@ -33,8 +32,8 @@ const NewBrand = () => {
     return (
         <>
             {contextHolder}
-            <div className='bg-white p-[10px] rounded-lg border'>
-                <h2 className='text-accent-pinkRed font-bold text-[16px] mb-[5px] flex gap-[10px]'><SquarePlus strokeWidth={1.75} /> Add New Brand</h2>
+            <div className='bg-white p-[14px] rounded-lg border'>
+                <h2 className=' font-medium text-[14px] mb-[5px] flex gap-[10px]'>New Brand</h2>
                 <Form
                     form={form}
                     layout='vertical'
@@ -52,7 +51,11 @@ const NewBrand = () => {
                         label="Logo : "
                         name="logoUrl"
                     >
-                        <MyUploadFile disabled={isPending} onFileListChange={setFileList} />
+                        <MyUploadFile
+                            disabled={isPending}
+                            quantity={1}
+                            setFileList={setFileList}
+                            fileList={fileList} />
                     </Form.Item>
                     <Form.Item<Brand>
                         label="Desciption : "

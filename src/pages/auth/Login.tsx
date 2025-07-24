@@ -1,8 +1,9 @@
-import { Button, Checkbox, Form, Input, message } from "antd"
+import { Button, Checkbox, Divider, Form, Input, message } from "antd"
 import { useLogin } from "../../hooks/useAuth"
 import { Link, useNavigate } from "react-router"
 import useRememberMe from "../../hooks/useRememberMe"
 import { useAuth } from "../../context/AuthProvider"
+import LoginGoogleButton from "../../components/MyGoogleButton"
 const Login = () => {
     const { login: authLogin } = useAuth();
     const navigate = useNavigate()
@@ -24,6 +25,13 @@ const Login = () => {
                     messageApi.error(error?.message)
                 },
             },)
+    }
+    const handleGGSuccess = () => {
+        messageApi.success("Login success")
+        navigate('/admin/categories')
+    }
+    const handleGGFail = (error: string) => {
+        messageApi.error(error)
     }
     return (
         <>
@@ -67,14 +75,19 @@ const Login = () => {
                                 </p>
                             </Form.Item>
                         </div>
-
                         <Form.Item label={null} className="flex justify-center">
                             <Button loading={isPending} type="primary" className="text-[14px] p-[20px] w-[300px] font-medium rounded-xl" htmlType="submit">
                                 Sign In
                             </Button>
                         </Form.Item>
-                        <div className="text-[14px]">
-                            Don't have an account? <Link to="/register" className="underline text-accent-pinkRed font-medium cursor-pointer">Sign up here</Link>
+                        <Divider children={<div className="font-normal">Or sign in with</div>} />
+                        <div className="flex justify-center">
+                            <LoginGoogleButton
+                                onSuccess={handleGGSuccess}
+                                onError={handleGGFail} />
+                        </div>
+                        <div className="text-[14px]  mt-[20px]">
+                            Don't have an account? <Link to="/register" className="underline hover:text-accent-pinkRed font-medium cursor-pointer">Sign up here</Link>
                         </div>
                     </Form>
                 </div>

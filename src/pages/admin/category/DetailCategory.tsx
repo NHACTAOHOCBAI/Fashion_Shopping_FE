@@ -24,7 +24,7 @@ const DetailCategory = ({ isDetailOpen, detailCategory, closeDetailModal }: Deta
             <div className="flex flex-col gap-2">
                 <Image
                     src={detailCategory?.imageUrl}
-                    style={{ width: 400, height: 300, objectFit: "cover" }} // borderRadius: 0 để tránh bo góc
+                    style={{ aspectRatio: 5 / 3, objectFit: "contain" }} // borderRadius: 0 để tránh bo góc
                     className=" rounded"
                 />
                 <MyField
