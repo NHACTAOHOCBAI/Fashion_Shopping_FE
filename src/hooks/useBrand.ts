@@ -38,11 +38,9 @@ export const useSelectBrand = () => useQuery({
                 label: category.name
             }
         })
-        return [
-            { value: 0, label: "No parent" },
-            ...selectOpt
-        ]
-    }
+        return selectOpt
+    },
+    staleTime: 1000 * 60 * 5, // 5 phút không bị stale
 });
 export const useDeleteBrand = () => {
     const queryClient = useQueryClient();

@@ -9,7 +9,8 @@ interface SidebarProps {
         items: {
             key: string;
             icon: JSX.Element;
-            name: JSX.Element;
+            to: string
+            name: React.ReactNode
         }[];
     }[];
 }
@@ -32,10 +33,9 @@ const Sidebar = ({ isCollapsed, activeItem, items }: SidebarProps) => {
                         </h3>
                         <ul className='flex flex-col gap-[2px]'>
                             {group.items.map((item) => (
-                                <li key={item.key} className='flex '>
+                                <Link to={item.to} key={item.key} className='flex '>
                                     <div className={` transition-all duration-[400ms] ease-in-out rounded-[4px] bg-accent-pinkRed ${activeItem === item.key ? 'opacity-100 w-[6px]' : 'opacity-0 w-0 '} `}></div>
-                                    <Link
-                                        to={item.key}
+                                    <div
                                         className={`flex mx-[10px] items-center w-[160px] p-[10px] rounded-[8px] transition duration-[400ms] ease-in-out ${activeItem === item.key ? 'bg-accent-pinkRed text-white' : 'text-text-body hover:text-accent-pinkRed '}`}
                                     >
                                         <span >{item.icon}</span>
@@ -44,8 +44,8 @@ const Sidebar = ({ isCollapsed, activeItem, items }: SidebarProps) => {
                                         >
                                             {item.name}
                                         </span>
-                                    </Link>
-                                </li>
+                                    </div>
+                                </Link>
                             ))}
                         </ul>
                     </div>

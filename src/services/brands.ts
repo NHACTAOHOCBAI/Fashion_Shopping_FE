@@ -1,12 +1,4 @@
 import axios from '../configs/AxiosConfig';
-interface Brand {
-    id: number;
-    name: string;
-    createdAt: Date;
-    updatedAt: Date;
-    description?: string;
-    logo?: string;
-}
 const getBrands = async (params?: QueryParams) => {
     const data = await axios.get('/brands', { params }) as GetAllResponse<Brand, 'brands'>
     return data

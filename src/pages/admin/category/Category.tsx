@@ -31,8 +31,8 @@ const Categories: React.FC = () => {
             onSuccess: () => {
                 messageApi.success("Delete categories success")
             },
-            onError: () => {
-                messageApi.error("Delete categories failed")
+            onError: (error) => {
+                messageApi.error(error.message)
             },
         },)
     }, [deleteCategory, messageApi])
@@ -59,7 +59,7 @@ const Categories: React.FC = () => {
         { title: 'Name', dataIndex: 'name', key: 'name' },
         {
             title: 'Created at',
-            key: 'id',
+            key: 'createdAt',
             render: (_: any, record: Category) => (
                 <p >
                     {formatDate(record.createdAt)}
@@ -68,7 +68,7 @@ const Categories: React.FC = () => {
         },
         {
             title: 'Updated at',
-            key: 'id',
+            key: 'updatedAt',
             render: (_: any, record: Category) => (
                 <p>
                     {formatDate(record.updatedAt)}

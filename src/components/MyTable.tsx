@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MyLoading from './MyLoading';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import MyClickable from './MyClickable';
+import { ChevronsUpDown } from 'lucide-react';
 interface Column {
-    title: string;
+    sort?: boolean
+    title: React.ReactNode;
     dataIndex?: string;
     key: string;
     render?: (text: any, record: any) => React.ReactNode;
@@ -18,6 +20,14 @@ interface TableProps {
     onPageChange?: (page: number) => void;
     isLoading?: boolean; // Thêm trạng thái loading
     width?: number; // Thêm thuộc tính width
+    sortData?: {
+        sort: "asc" | "desc";
+        value: string;
+    } | undefined,
+    setSortData?: (value: {
+        sort: "asc" | "desc";
+        value: string;
+    } | undefined) => void
 }
 
 const MyTable: React.FC<TableProps> = ({
@@ -28,17 +38,37 @@ const MyTable: React.FC<TableProps> = ({
     itemsPerPage,
     onPageChange,
     isLoading = false,
-    width
+    width,
+    setSortData,
+    sortData
 }) => {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage + 1;
     const endIndex = Math.min(currentPage * itemsPerPage, totalItems);
-
+    const handleSort = (value: string) => {
+        if (setSortData) {
+            if (sortData?.value === value) {
+                setSortData({
+                    sort: sortData.sort === "asc" ? "desc" : "asc",
+                    value: value
+                })
+            }
+            else {
+                setSortData({
+                    sort: "asc",
+                    value: value
+                })
+            }
+        }
+    }
     const handlePageChange = (page: number) => {
         if (onPageChange && page >= 1 && page <= totalPages) {
             onPageChange(page);
         }
     };
+    useEffect(() => {
+        console.log(sortData)
+    }, [sortData])
     return (
         <div className="container mx-auto" style={{ width: width }}>
             <table className="min-w-full bg-white  rounded-lg border overflow-hidden  ">
@@ -46,14 +76,18 @@ const MyTable: React.FC<TableProps> = ({
                     <tr className="bg-background-gray border-b">
                         {columns.map((column) => (
                             <th key={column.key} className="py-2 px-4 text-left">
-                                {column.title}
+                                {(column.sort === undefined || column.sort === false) ?
+                                    column.title
+                                    :
+                                    <div className='flex gap-1 items-center' onClick={() => handleSort(column.key)} >{column.title} <ChevronsUpDown strokeWidth={3} size={10} /></div>
+                                }
                             </th>
                         ))}
                     </tr>
                 </thead >
                 <tbody>
                     {isLoading ? (
-                        <tr>
+                        <tr >
                             <td colSpan={columns.length} className="text-center py-4">
                                 <MyLoading />
                             </td>

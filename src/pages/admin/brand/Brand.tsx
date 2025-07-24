@@ -32,8 +32,8 @@ const Brands = () => {
             onSuccess: () => {
                 messageApi.success("Delete brands success")
             },
-            onError: () => {
-                messageApi.error("Delete brands failed")
+            onError: (error) => {
+                messageApi.error(error.message)
             },
         },)
     }, [deleteBrand, messageApi])

@@ -15,7 +15,10 @@ interface UpdateCategoryProps {
     }[] | undefined
 }
 const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categoryOpt }: UpdateCategoryProps) => {
-    categoryOpt = useMemo(() => categoryOpt?.filter((value) => value.value !== updatedCategory?.id), [categoryOpt, updatedCategory])
+    const categorySelectOpt = useMemo(() => [
+        { value: undefined, label: "No parent" },
+        ...(categoryOpt?.filter((value) => value.value !== updatedCategory?.id) ?? [])
+    ], [categoryOpt, updatedCategory])
     const { mutate: updateCategory, isPending } = useUpdateCategory();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [form] = Form.useForm()
@@ -83,7 +86,7 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
                         <MySelect
                             showSearch
                             placeholder="Bags..."
-                            options={categoryOpt}
+                            options={categorySelectOpt}
                         />
                     </Form.Item>
                     <Form.Item<Category>

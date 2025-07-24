@@ -8,6 +8,7 @@ import VerifyEmail from "../pages/auth/VerifyEmail";
 const Dashboard = lazy(() => import('../pages/admin/dashboard/Dashboard'));
 const Category = lazy(() => import('../pages/admin/category/Category'));
 const Brand = lazy(() => import('../pages/admin/brand/Brand'));
+const Product = lazy(() => import('../pages/admin/product/Product'));
 const router = createBrowserRouter([
     {
         path: "/admin",
@@ -36,7 +37,15 @@ const router = createBrowserRouter([
                         <Brand />
                     </Suspense>
                 )
-            }
+            },
+            {
+                path: "products",
+                element: (
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Product />
+                    </Suspense>
+                )
+            },
         ],
     },
     {

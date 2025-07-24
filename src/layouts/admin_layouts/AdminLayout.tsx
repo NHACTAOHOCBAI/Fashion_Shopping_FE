@@ -1,6 +1,6 @@
-import { Album, LayoutDashboard, Package } from 'lucide-react';
+import { Album, LayoutDashboard, Package, Shirt } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
 import Sidebar from './Sidebar';
 import Header from './Header';
 
@@ -15,7 +15,8 @@ const AdminLayout = () => {
                 {
                     key: 'dashboard',
                     icon: <LayoutDashboard strokeWidth={1.8} />,
-                    name: <Link to='/admin/dashboard'>Dashboard</Link>,
+                    to: '/admin/dashboard',
+                    name: "Dashboard",
                 },
             ]
         },
@@ -25,12 +26,20 @@ const AdminLayout = () => {
                 {
                     key: 'categories',
                     icon: <Package strokeWidth={1.8} />,
-                    name: <Link to='/admin/categories'>Categories</Link>,
+                    to: '/admin/categories',
+                    name: "Categories"
                 },
                 {
                     key: 'brands',
                     icon: <Album strokeWidth={1.8} />,
-                    name: <Link to='/admin/brands'>Brands</Link>,
+                    to: '/admin/brands',
+                    name: "Brands"
+                },
+                {
+                    key: 'products',
+                    icon: <Shirt strokeWidth={1.8} />,
+                    to: '/admin/products',
+                    name: "Products"
                 }
             ]
         }
