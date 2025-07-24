@@ -1,0 +1,20 @@
+:where(.css-dev-only-do-not-override-1blgjfw).ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select, :where(.css-dev-only-do-not-override-1blgjfw).ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
+    aspect-ratio: 5 / 3 !important;
+    width: 48%;
+    height: auto !important;
+    text-align: center;
+    vertical-align: top;
+    background-color: rgba(0, 0, 0, 0.02);
+    border: 1px dashed #d9d9d9;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+:where(.css-dev-only-do-not-override-1blgjfw).ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container, :where(.css-dev-only-do-not-override-1blgjfw).ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container, :where(.css-dev-only-do-not-override-1blgjfw).ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container, :where(.css-dev-only-do-not-override-1blgjfw).ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container
+ {
+    display: inline-block;
+    vertical-align: top;
+    aspect-ratio: 5 / 3 !important;
+    width: 48% !important;
+    height: auto !important;
+}
