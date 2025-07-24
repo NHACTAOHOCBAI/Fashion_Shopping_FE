@@ -13,7 +13,7 @@ import useOpenModal from '../../../hooks/useOpenModal';
 import usePaginationSearch from '../../../hooks/usePaginationSearch';
 import DetailCategory from './DetailCategory';
 import MyPopConfirm from '../../../components/MyPopconfirm';
-const itemsPerPage = 4;
+const itemsPerPage = import.meta.env.VITE_itemsPerPage;
 const Categories: React.FC = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const { data: updatedCategory, isModalOpen: isUpdateOpen, openModal: openUpdateModal, closeModal: closeUpdateModal } = useOpenModal<Category>()

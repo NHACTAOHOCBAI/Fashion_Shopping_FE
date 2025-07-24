@@ -1,28 +1,27 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import MyTable from '../../../components/MyTable';
 import MyClickable from '../../../components/MyClickable';
 import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { Input, message } from 'antd';
-import { Search } from 'lucide-react';
+import { Button, Input, message } from 'antd';
+import { Plus, Search } from 'lucide-react';
 import { useSelectCategory } from '../../../hooks/useCategory';
 import { formatDate } from '../../../utils/formatTime';
-import useOpenModal from '../../../hooks/useOpenModal';
 import usePaginationSearch from '../../../hooks/usePaginationSearch';
 import MyPopConfirm from '../../../components/MyPopconfirm';
 import { useDeleteProduct, useProdutcs } from '../../../hooks/useProduct';
 import { formatPrice } from '../../../utils/formatPrice';
 import { useSelectBrand } from '../../../hooks/useBrand';
 import ProductFilter from './ProductFilter';
+import { useNavigate } from 'react-router';
 export interface ProductFilters {
     brandId: number[],
     categoryId: number[]
 }
-const itemsPerPage = 4;
+const itemsPerPage = import.meta.env.VITE_itemsPerPage;
 const Products: React.FC = () => {
+    const router = useNavigate()
     const [messageApi, contextHolder] = message.useMessage();
-    const { data: updatedCategory, isModalOpen: isUpdateOpen, openModal: openUpdateModal, closeModal: closeUpdateModal } = useOpenModal<Product>()
-    const { data: detailCategory, isModalOpen: isDetailOpen, openModal: openDetailModal, closeModal: closeDetailModal } = useOpenModal<Product>()
     const { data: categoryOpt } = useSelectCategory()
     const { data: brandOpt } = useSelectBrand()
     //
@@ -51,7 +50,7 @@ const Products: React.FC = () => {
             title: 'Id',
             key: 'id',
             render: (_: any, record: Product) => (
-                <p className="text-accent-pinkRed cursor-pointer" onClick={() => openDetailModal(record)} >
+                <p className="text-accent-pinkRed cursor-pointer" onClick={() => router(`/admin/products/detail-product/${record.id}`)} >
                     {`#${record.id}`}
                 </p>
             )
@@ -124,7 +123,7 @@ const Products: React.FC = () => {
             render: (_: any, record: Product) => (
                 <div className="flex rounded-lg border overflow-hidden bg-background-gray items-center justify-evenly w-[70px] h-[30px]">
                     <MyClickable onClick={() => {
-                        openUpdateModal(record)
+                        router(`/admin/products/update-product/${record.id}`)
                     }}>
                         <FaRegEdit />
                     </MyClickable>
@@ -141,10 +140,7 @@ const Products: React.FC = () => {
                 </div>
             ),
         },
-    ], [openUpdateModal, openDetailModal, handleDelete])
-    useEffect(() => {
-        console.log(filters)
-    }, [filters])
+    ], [handleDelete, router])
     return (
         <>
             {contextHolder}
@@ -161,11 +157,16 @@ const Products: React.FC = () => {
                             className='rounded-[14px] p-2 w-[60%] min-w-[200px]'
                             placeholder='Search product name'
                         />
-                        <ProductFilter
-                            categoryOpt={categoryOpt}
-                            brandOpt={brandOpt}
-                            setFilters={setFilters}
-                        />
+                        <div className='flex gap-[10px]'>
+                            <ProductFilter
+                                categoryOpt={categoryOpt}
+                                brandOpt={brandOpt}
+                                setFilters={setFilters}
+                            />
+                            <Button onClick={() => router('/admin/products/new-product')} type="primary" className="rounded-2xl flex items-center">
+                                <Plus size={16} /> Create
+                            </Button>
+                        </div>
                     </div>
                     <MyTable
                         setSortData={setSortData}

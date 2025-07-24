@@ -5,7 +5,7 @@ import MyPopover from "../../../components/MyPopover"
 import React from "react"
 
 interface ProductFilterProps {
-    setFilters: (value: ProductFilters | undefined) => void
+    setFilters: (value: ProductFilters) => void
     categoryOpt: {
         value: number;
         label: string;

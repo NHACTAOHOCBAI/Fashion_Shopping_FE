@@ -81,7 +81,6 @@ const UpdateBrand = ({ isUpdateOpen, closeUpdateModal, updatedBrand }: UpdateBra
                         name="logoUrl"
                     >
                         <MyUploadFile
-                            width={"50%"}
                             disabled={isPending}
                             quantity={1}
                             setFileList={setFileList}

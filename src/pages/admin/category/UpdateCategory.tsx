@@ -94,7 +94,6 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
                         name="imageUrl"
                     >
                         <MyUploadFile
-                            width={"50%"}
                             disabled={isPending}
                             quantity={1}
                             setFileList={setFileList}

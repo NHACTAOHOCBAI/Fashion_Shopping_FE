@@ -7,7 +7,7 @@ import Header from './Header';
 const AdminLayout = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const { pathname } = useLocation();
-    const endpoints = pathname.split('/').pop() as string
+    const endpoints = pathname.split('/')[2]
     const fakedata = useMemo(() => [
         {
             groupName: 'overview',

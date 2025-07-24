@@ -14,7 +14,7 @@ import UpdateBrand from "./UpdateBrand";
 import DetailBrand from "./DetailBrand";
 import { Search } from "lucide-react";
 
-const itemsPerPage = 4;
+const itemsPerPage = import.meta.env.VITE_itemsPerPage;
 const Brands = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const { data: updatedBrand, isModalOpen: isUpdateOpen, openModal: openUpdateModal, closeModal: closeUpdateModal } = useOpenModal<Brand>()

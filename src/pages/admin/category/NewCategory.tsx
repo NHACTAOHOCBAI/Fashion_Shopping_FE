@@ -77,7 +77,6 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
                         name="imageUrl"
                     >
                         <MyUploadFile
-                            width={"50%"}
                             disabled={isPending}
                             quantity={1}
                             setFileList={setFileList}

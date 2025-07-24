@@ -5,10 +5,14 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import NotFoundPage from "../components/NotFoundPage";
 import VerifyEmail from "../pages/auth/VerifyEmail";
+import MyLoading from "../components/MyLoading";
 const Dashboard = lazy(() => import('../pages/admin/dashboard/Dashboard'));
 const Category = lazy(() => import('../pages/admin/category/Category'));
 const Brand = lazy(() => import('../pages/admin/brand/Brand'));
 const Product = lazy(() => import('../pages/admin/product/Product'));
+const NewProduct = lazy(() => import('../pages/admin/product/NewProduct'));
+const UpdateProduct = lazy(() => import('../pages/admin/product/UpdateProduct'));
+const DetailProduct = lazy(() => import('../pages/admin/product/DetailProduct'));
 const router = createBrowserRouter([
     {
         path: "/admin",
@@ -17,7 +21,7 @@ const router = createBrowserRouter([
             {
                 path: "dashboard",
                 element: (
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<MyLoading />}>
                         <Dashboard />
                     </Suspense>
                 )
@@ -25,7 +29,7 @@ const router = createBrowserRouter([
             {
                 path: "categories",
                 element: (
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<MyLoading />}>
                         <Category />
                     </Suspense>
                 )
@@ -33,7 +37,7 @@ const router = createBrowserRouter([
             {
                 path: "brands",
                 element: (
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<MyLoading />}>
                         <Brand />
                     </Suspense>
                 )
@@ -41,8 +45,32 @@ const router = createBrowserRouter([
             {
                 path: "products",
                 element: (
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<MyLoading />}>
                         <Product />
+                    </Suspense>
+                )
+            },
+            {
+                path: "products/new-product",
+                element: (
+                    <Suspense fallback={<MyLoading />}>
+                        <NewProduct />
+                    </Suspense>
+                )
+            },
+            {
+                path: "products/update-product/:id",
+                element: (
+                    <Suspense fallback={<MyLoading />}>
+                        <UpdateProduct />
+                    </Suspense>
+                )
+            },
+            {
+                path: "products/detail-product/:id",
+                element: (
+                    <Suspense fallback={<MyLoading />}>
+                        <DetailProduct />
                     </Suspense>
                 )
             },
