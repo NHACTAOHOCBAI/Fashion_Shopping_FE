@@ -12,8 +12,9 @@ import MyPopConfirm from '../../../components/MyPopconfirm';
 import { useDeleteProduct, useProdutcs } from '../../../hooks/useProduct';
 import { formatPrice } from '../../../utils/formatPrice';
 import { useSelectBrand } from '../../../hooks/useBrand';
-import ProductFilter from './ProductFilter';
+
 import { useNavigate } from 'react-router';
+import ProductFilter from './ui/ProductFilter';
 export interface ProductFilters {
     brandId: number[],
     categoryId: number[]

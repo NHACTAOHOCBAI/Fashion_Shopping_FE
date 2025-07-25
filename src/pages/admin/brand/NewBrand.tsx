@@ -52,6 +52,7 @@ const NewBrand = () => {
                         name="logoUrl"
                     >
                         <MyUploadFile
+                            width={"50%"}
                             disabled={isPending}
                             quantity={1}
                             setFileList={setFileList}

@@ -36,7 +36,7 @@ const Header = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
         )
     }
     return (
-        <header className="bg-white  p-3 flex items-center justify-between">
+        <header className="bg-white  p-3 flex items-center justify-between drop-shadow-sm">
             <MyClickable> <AlignLeft strokeWidth={1} onClick={toggleSidebar} /></MyClickable>
             <div className='flex items-center gap-6 ml-auto mr-[30px]'>
                 <MyClickable ><Bell size={18} strokeWidth={1} /></MyClickable>
