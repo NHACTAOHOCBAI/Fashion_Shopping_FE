@@ -11,7 +11,7 @@ interface ImageSliderProps {
     images: ImageItem[];
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
+const MyImageDisplay: React.FC<ImageSliderProps> = ({ images }) => {
     return (
         <Carousel arrows autoplay dots effect="fade" style={{ width: '100%', maxWidth: '600px', margin: "auto", aspectRatio: "5/3" }}>
             {images.map((image, index) => (
@@ -28,4 +28,4 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
     );
 };
 
-export default ImageSlider;
+export default MyImageDisplay;

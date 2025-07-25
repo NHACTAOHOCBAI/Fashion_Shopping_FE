@@ -6,6 +6,7 @@ import Register from "../pages/auth/Register";
 import NotFoundPage from "../components/NotFoundPage";
 import VerifyEmail from "../pages/auth/VerifyEmail";
 import MyLoading from "../components/MyLoading";
+import ClientLayout from "../layouts/client_layouts/ClientLayout";
 const Dashboard = lazy(() => import('../pages/admin/dashboard/Dashboard'));
 const Category = lazy(() => import('../pages/admin/category/Category'));
 const Brand = lazy(() => import('../pages/admin/brand/Brand'));
@@ -13,7 +14,22 @@ const Product = lazy(() => import('../pages/admin/product/Product'));
 const NewProduct = lazy(() => import('../pages/admin/product/NewProduct'));
 const UpdateProduct = lazy(() => import('../pages/admin/product/UpdateProduct'));
 const DetailProduct = lazy(() => import('../pages/admin/product/DetailProduct'));
+const Home = lazy(() => import('../pages/client/home/Home'));
 const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <ClientLayout />,
+        children: [
+            {
+                index: true,
+                element: (
+                    <Suspense fallback={<MyLoading />}>
+                        <Home />
+                    </Suspense>
+                )
+            }
+        ]
+    },
     {
         path: "/admin",
         element: <AdminLayout />,

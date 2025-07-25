@@ -1,8 +1,8 @@
 import { Button, Checkbox, Form } from "antd"
-import type { ProductFilters } from "./Product"
 import { SlidersHorizontal } from "lucide-react"
-import MyPopover from "../../../components/MyPopover"
+import MyPopover from "../../../../components/MyPopover"
 import React from "react"
+import type { ProductFilters } from "../Product"
 
 interface ProductFilterProps {
     setFilters: (value: ProductFilters) => void
