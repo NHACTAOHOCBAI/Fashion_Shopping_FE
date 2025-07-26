@@ -1,13 +1,14 @@
 import { ShoppingCart, UserRound } from "lucide-react"
-import { Link } from "react-router"
+import { Link, useLocation } from "react-router"
 
 const Header = () => {
     return (
-        <header className="px-[80px] py-[20px]  bg-white drop-shadow-sm w-full flex">
-            <nav className="flex gap-[40px]">
-                <Link to="/" className="text-[16px] font-semibold">HOME</Link>
-                <Link to="/products" className="text-[16px] font-semibold">PRODUCTS</Link>
-                <Link to="/blogs" className="text-[16px] font-semibold">BLOGS</Link>
+        <header className="px-[80px]   bg-white drop-shadow-sm w-full flex pt-[18px]">
+            <nav className="flex gap-[40px] overflow-hidden items-center">
+                <NavItem path="" value="HOME" />
+                <NavItem path="products" value="PRODUCTS" />
+                <NavItem path="blogs" value="BLOGS" />
+
             </nav>
             <div className="ml-auto flex gap-[10px]">
                 <UserRound size={20} />
@@ -16,5 +17,15 @@ const Header = () => {
         </header>
     )
 }
-
+const NavItem = ({ path, value }: { path: string, value: string }) => {
+    const { pathname } = useLocation();
+    const endpoints = pathname.split('/').pop()
+    const isActive = path === endpoints
+    return (
+        <div>
+            <Link to={`/${path}`} className={`duration-200 text-[16px] font-semibold ${isActive ? "drop-shadow text-black " : ""}`}>{value}</Link>
+            <img className={`duration-200 mx-auto mt-[10px] ${isActive ? "" : "translate-y-[6px]"}`} src="/triangle.svg" />
+        </div>
+    )
+}
 export default Header
