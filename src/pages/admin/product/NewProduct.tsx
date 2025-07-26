@@ -1,16 +1,17 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, InputNumber, TreeSelect, type UploadFile } from "antd"
+import { Button, Card, Form, Input, InputNumber, message, TreeSelect, type UploadFile } from "antd"
 import MyUploadFile from "../../../components/MyUploadFile"
 import TextArea from "antd/es/input/TextArea"
 import MySelect from "../../../components/MySelect"
 import { useSelectBrand } from "../../../hooks/useBrand"
 import { useSelectCategory } from "../../../hooks/useCategory"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { formatPrice } from "../../../utils/formatPrice"
 import { formatNumber } from '../../../utils/formatNumber';
 import { Link } from 'react-router';
 import { ChevronRight } from 'lucide-react';
 import { sizeSelect } from '../../../constants/size';
+import { useCreateProduct } from '../../../hooks/useProduct';
 const maxFile = import.meta.env.VITE_maxFile
 const NewProduct = () => {
     const { data: categoryOpt } = useSelectCategory()
@@ -18,34 +19,53 @@ const NewProduct = () => {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [fileLists, setFileLists] = useState<UploadFile[][]>([]);
     const [form] = Form.useForm()
-    const handleAdd = () => {
+    const [messageApi, contextHolder] = message.useMessage();
+    const { mutate: createProduct } = useCreateProduct()
+    const handleAdd = useCallback(() => {
         const currentVariants = form.getFieldValue("variants") || [];
         form.setFieldsValue({ variants: [...currentVariants, {}] });
         setFileLists((prev) => [...prev, []]);
-    };
-    const handleRemove = (index: number, remove: (index: number) => void) => {
+    }, [form])
+    const handleRemove = useCallback((index: number, remove: (index: number) => void) => {
         remove(index);
         setFileLists((prev) => prev.filter((_, idx) => idx !== index));
-    };
-    const onFinish = (values: any) => {
+    }, [])
+    const reset = useCallback(() => {
+        form.resetFields();
+        setFileList([])
+        setFileLists([])
+    }, [form])
+    const onFinish = useCallback((values: any) => {
         const images = fileLists.map((value) =>
             value[0].originFileObj
         )
         const thumbnails = fileList.map(values => values.originFileObj)
         const data = {
             name: values.name,
-            thumbnails: thumbnails,
+            images: thumbnails as File[],
             description: values.description,
             price: values.price,
             categoryId: values.categoryId,
             brandId: values.brandId,
             variants: values.variants,
-            images: images
+            variant_images: images as File[]
         }
-        console.log(data)
-    }
+        createProduct(data,
+            {
+                onSuccess: () => {
+                    reset()
+                    messageApi.success("Create product success")
+                },
+                onError: (error) => {
+                    messageApi.error(error.message)
+                },
+            },
+
+        )
+    }, [createProduct, fileList, fileLists, messageApi, reset])
     return (
         <>
+            {contextHolder}
             <h1 className='font-medium text-[14px] text-text-heading flex items-center'>
                 <Link to="/admin/products" className='text-zinc-300'>Products</Link>
                 <ChevronRight size={20} className='text-zinc-300' />
@@ -183,7 +203,7 @@ const NewProduct = () => {
 
                                             <Form.Item
                                                 label="Variant price :"
-                                                name={[field.name, 'variantPrice']}
+                                                name={[field.name, 'price']}
                                                 rules={[{ required: true, message: 'Please input variant price!' }]}
                                             >
                                                 <InputNumber
@@ -220,7 +240,7 @@ const NewProduct = () => {
                 </div>
             </Form>
             <div className='flex gap-[10px] mt-[20px] mb-[50px]'>
-                <Button className='ml-auto' onClick={() => form.resetFields()}>Cancel</Button>
+                <Button className='ml-auto' onClick={() => reset()}>Cancel</Button>
                 <Button type='primary' onClick={() => form.submit()}>Create</Button>
             </div>
         </>

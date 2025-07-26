@@ -1,12 +1,16 @@
 // hooks/useUser.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createProduct, deleteProduct, getProducts } from '../services/product';
+import { createProduct, deleteProduct, getProductById, getProducts } from '../services/product';
 
 export const useProdutcs = (params: QueryParams) =>
     useQuery({
         queryKey: ['products', params],
         queryFn: () => getProducts(params),
-        // keepPreviousData: true, // giữ data cũ khi query thay đổi
+    });
+export const useGetProdutcById = (id: number) =>
+    useQuery({
+        queryKey: ['product', id],
+        queryFn: () => getProductById({ id }),
     });
 export const useCreateProduct = () => {
     const queryClient = useQueryClient();
