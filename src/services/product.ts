@@ -60,6 +60,7 @@ const updateProduct = async (data: {
     images: File[],
     variant_images: File[]
 }) => {
+    console.log(data)
     data.variants = data.variants.map((value) => {
         return {
             remaining: value.quantity,
@@ -92,6 +93,6 @@ const deleteProduct = async (data: { id: number }) => {
 }
 const getProductById = async (data: { id: number }) => {
     const res = await axios.get(`/products/${data.id}`)
-    return res
+    return res as unknown as Product
 }
 export { getProducts, createProduct, deleteProduct, updateProduct, getProductById }

@@ -20,7 +20,7 @@ const NewProduct = () => {
     const [fileLists, setFileLists] = useState<UploadFile[][]>([]);
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage();
-    const { mutate: createProduct } = useCreateProduct()
+    const { mutate: createProduct, isPending } = useCreateProduct()
     const handleAdd = useCallback(() => {
         const currentVariants = form.getFieldValue("variants") || [];
         form.setFieldsValue({ variants: [...currentVariants, {}] });
@@ -85,12 +85,13 @@ const NewProduct = () => {
                             name="name"
                             rules={[{ required: true, message: 'Please input product name!' }]}
                         >
-                            <Input placeholder='Enter name' />
+                            <Input disabled={isPending} placeholder='Enter name' />
                         </Form.Item>
                         <Form.Item
                             label="Thumbnail : "
                         >
                             <MyUploadFile
+                                disabled={isPending}
                                 quantity={maxFile}
                                 setFileList={setFileList}
                                 fileList={fileList} />
@@ -103,6 +104,7 @@ const NewProduct = () => {
                                 rules={[{ required: true, message: 'Please select category of the product!' }]}
                             >
                                 <MySelect
+                                    disabled={isPending}
                                     showSearch
                                     placeholder="Select category"
                                     options={categoryOpt}
@@ -115,6 +117,7 @@ const NewProduct = () => {
                                 rules={[{ required: true, message: 'Please select brand of the product!' }]}
                             >
                                 <MySelect
+                                    disabled={isPending}
                                     showSearch
                                     placeholder="Select brand"
                                     options={brandOpt}
@@ -127,6 +130,7 @@ const NewProduct = () => {
                             rules={[{ required: true, message: 'Please input product price!' }]}
                         >
                             <InputNumber
+                                disabled={isPending}
                                 placeholder="Enter price"
                                 style={{ width: '100%' }}
                                 min={0}
@@ -141,6 +145,7 @@ const NewProduct = () => {
                             name="description"
                         >
                             <TextArea
+                                disabled={isPending}
                                 placeholder="Enter description"
                                 rows={5}
                             />
@@ -157,7 +162,7 @@ const NewProduct = () => {
                                             title={`Variant ${field.name + 1}`}
                                             key={field.key}
                                             extra={
-                                                <CloseOutlined onClick={() => handleRemove(field.name, remove)} />
+                                                <CloseOutlined disabled={isPending} onClick={() => handleRemove(field.name, remove)} />
                                             }
                                         >
                                             <div className="flex gap-[10px] justify-between">
@@ -168,6 +173,7 @@ const NewProduct = () => {
                                                     rules={[{ required: true, message: 'Please input size!' }]}
                                                 >
                                                     <TreeSelect
+                                                        disabled={isPending}
                                                         virtual={false}
                                                         showSearch
                                                         style={{ width: '100%' }}
@@ -184,13 +190,14 @@ const NewProduct = () => {
                                                     name={[field.name, 'color']}
                                                     rules={[{ required: true, message: 'Please input color!' }]}
                                                 >
-                                                    <Input placeholder="Enter color" />
+                                                    <Input disabled={isPending} placeholder="Enter color" />
                                                 </Form.Item>
                                             </div>
 
                                             <div className="mb-4">
                                                 <label className="font-medium block mb-1">Image :</label>
                                                 <MyUploadFile
+                                                    disabled={isPending}
                                                     quantity={1}
                                                     fileList={fileLists[field.name] || []}
                                                     setFileList={(newList) => {
@@ -207,6 +214,7 @@ const NewProduct = () => {
                                                 rules={[{ required: true, message: 'Please input variant price!' }]}
                                             >
                                                 <InputNumber
+                                                    disabled={isPending}
                                                     placeholder="Enter price"
                                                     style={{ width: '100%' }}
                                                     min={0}
@@ -221,6 +229,7 @@ const NewProduct = () => {
                                                 rules={[{ required: true, message: 'Please input quantity!' }]}
                                             >
                                                 <InputNumber
+                                                    disabled={isPending}
                                                     style={{ width: '100%' }}
                                                     placeholder="Enter quantity"
                                                     min={1}
@@ -230,7 +239,7 @@ const NewProduct = () => {
                                         </Card>
                                     ))}
 
-                                    <Button type="dashed" onClick={handleAdd} block>
+                                    <Button disabled={isPending} type="dashed" onClick={handleAdd} block>
                                         + Add Item
                                     </Button>
                                 </div>

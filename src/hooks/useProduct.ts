@@ -1,6 +1,6 @@
 // hooks/useUser.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createProduct, deleteProduct, getProductById, getProducts } from '../services/product';
+import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from '../services/product';
 
 export const useProdutcs = (params: QueryParams) =>
     useQuery({
@@ -16,6 +16,15 @@ export const useCreateProduct = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: createProduct,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['products'] });
+        },
+    });
+};
+export const useUpdateProduct = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: updateProduct,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['products'] });
         },

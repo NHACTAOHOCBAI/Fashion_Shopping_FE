@@ -1,55 +1,110 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, InputNumber, TreeSelect, type UploadFile } from "antd"
+import { Button, Card, Form, Input, InputNumber, message, TreeSelect, type UploadFile } from "antd"
 import MyUploadFile from "../../../components/MyUploadFile"
 import TextArea from "antd/es/input/TextArea"
 import MySelect from "../../../components/MySelect"
 import { useSelectBrand } from "../../../hooks/useBrand"
 import { useSelectCategory } from "../../../hooks/useCategory"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { formatPrice } from "../../../utils/formatPrice"
 import { formatNumber } from '../../../utils/formatNumber';
-import { Link } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { ChevronRight } from 'lucide-react';
 import { sizeSelect } from '../../../constants/size';
+import { useGetProdutcById, useUpdateProduct } from '../../../hooks/useProduct';
 const maxFile = import.meta.env.VITE_maxFile
 const UpdateProduct = () => {
+    const { id } = useParams();
+    const { mutate: updateProduct, isPending } = useUpdateProduct();
+    const { data: updatedProduct } = useGetProdutcById(Number(id))
     const { data: categoryOpt } = useSelectCategory()
     const { data: brandOpt } = useSelectBrand()
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [fileLists, setFileLists] = useState<UploadFile[][]>([]);
     const [form] = Form.useForm()
-    const handleAdd = () => {
+    const [messageApi, contextHolder] = message.useMessage();
+    const handleAdd = useCallback(() => {
         const currentVariants = form.getFieldValue("variants") || [];
         form.setFieldsValue({ variants: [...currentVariants, {}] });
         setFileLists((prev) => [...prev, []]);
-    };
-    const handleRemove = (index: number, remove: (index: number) => void) => {
+    }, [form])
+    const handleRemove = useCallback((index: number, remove: (index: number) => void) => {
         remove(index);
         setFileLists((prev) => prev.filter((_, idx) => idx !== index));
-    };
-    const onFinish = (values: any) => {
+    }, [])
+    const reset = useCallback(() => {
+        form.resetFields();
+        setFileList([])
+        setFileLists([])
+    }, [form])
+    const onFinish = useCallback((values: any) => {
         const images = fileLists.map((value) =>
             value[0].originFileObj
         )
         const thumbnails = fileList.map(values => values.originFileObj)
         const data = {
+            id: updatedProduct?.id as number,
             name: values.name,
-            thumbnails: thumbnails,
+            images: thumbnails as File[],
             description: values.description,
             price: values.price,
             categoryId: values.categoryId,
             brandId: values.brandId,
             variants: values.variants,
-            images: images
+            variant_images: images as File[]
         }
-        console.log(data)
-    }
+        updateProduct(data,
+            {
+                onSuccess: () => {
+                    reset();
+                    messageApi.success("Update product success");
+                },
+                onError: (error) => {
+                    messageApi.error(error.message)
+                },
+            }
+        );
+    }, [updateProduct, fileList, fileLists, messageApi, reset, updatedProduct?.id])
+    useEffect(() => {
+        if (!updatedProduct) return;
+        const thumbnails: UploadFile[] = updatedProduct.images.map((image, index) => ({
+            uid: `thumbnail-${index}`,
+            name: `thumbnail-${index}.png`,
+            status: 'done',
+            url: image.imageUrl,
+        }))
+        const variantFileLists: UploadFile[][] = updatedProduct.variants.map((variant, index) => ([
+            {
+                uid: `variant-${index}`,
+                name: `variant-${index}.png`,
+                status: 'done',
+                url: variant.imageUrl,
+            }
+        ]))
+        const variants = updatedProduct.variants.map((value) => {
+            return {
+                ...value,
+                price: Number(value.price)
+            }
+        })
+        setFileLists(variantFileLists);
+        setFileList(thumbnails);
+        form.setFieldsValue({
+            name: updatedProduct.name,
+            categoryId: updatedProduct.categoryId,
+            brandId: updatedProduct.brandId,
+            price: Number(updatedProduct.price),
+            description: updatedProduct.description,
+            variants: variants,
+        })
+    }, [updatedProduct, form])
     return (
-        <div>
+        <>
+            {contextHolder}
             <h1 className='font-medium text-[14px] text-text-heading flex items-center'>
                 <Link to="/admin/products" className='text-zinc-300'>Products</Link>
                 <ChevronRight size={20} className='text-zinc-300' />
-                Add New Product</h1>
+                Update Product</h1>
             <Form
                 form={form}
                 layout='vertical'
@@ -65,12 +120,13 @@ const UpdateProduct = () => {
                             name="name"
                             rules={[{ required: true, message: 'Please input product name!' }]}
                         >
-                            <Input placeholder='Enter name' />
+                            <Input disabled={isPending} placeholder='Enter name' />
                         </Form.Item>
                         <Form.Item
                             label="Thumbnail : "
                         >
                             <MyUploadFile
+                                disabled={isPending}
                                 quantity={maxFile}
                                 setFileList={setFileList}
                                 fileList={fileList} />
@@ -83,6 +139,7 @@ const UpdateProduct = () => {
                                 rules={[{ required: true, message: 'Please select category of the product!' }]}
                             >
                                 <MySelect
+                                    disabled={isPending}
                                     showSearch
                                     placeholder="Select category"
                                     options={categoryOpt}
@@ -95,6 +152,7 @@ const UpdateProduct = () => {
                                 rules={[{ required: true, message: 'Please select brand of the product!' }]}
                             >
                                 <MySelect
+                                    disabled={isPending}
                                     showSearch
                                     placeholder="Select brand"
                                     options={brandOpt}
@@ -107,6 +165,7 @@ const UpdateProduct = () => {
                             rules={[{ required: true, message: 'Please input product price!' }]}
                         >
                             <InputNumber
+                                disabled={isPending}
                                 placeholder="Enter price"
                                 style={{ width: '100%' }}
                                 min={0}
@@ -121,6 +180,7 @@ const UpdateProduct = () => {
                             name="description"
                         >
                             <TextArea
+                                disabled={isPending}
                                 placeholder="Enter description"
                                 rows={5}
                             />
@@ -137,7 +197,7 @@ const UpdateProduct = () => {
                                             title={`Variant ${field.name + 1}`}
                                             key={field.key}
                                             extra={
-                                                <CloseOutlined onClick={() => handleRemove(field.name, remove)} />
+                                                <CloseOutlined disabled={isPending} onClick={() => handleRemove(field.name, remove)} />
                                             }
                                         >
                                             <div className="flex gap-[10px] justify-between">
@@ -148,6 +208,7 @@ const UpdateProduct = () => {
                                                     rules={[{ required: true, message: 'Please input size!' }]}
                                                 >
                                                     <TreeSelect
+                                                        disabled={isPending}
                                                         virtual={false}
                                                         showSearch
                                                         style={{ width: '100%' }}
@@ -164,13 +225,14 @@ const UpdateProduct = () => {
                                                     name={[field.name, 'color']}
                                                     rules={[{ required: true, message: 'Please input color!' }]}
                                                 >
-                                                    <Input placeholder="Enter color" />
+                                                    <Input disabled={isPending} placeholder="Enter color" />
                                                 </Form.Item>
                                             </div>
 
                                             <div className="mb-4">
                                                 <label className="font-medium block mb-1">Image :</label>
                                                 <MyUploadFile
+                                                    disabled={isPending}
                                                     quantity={1}
                                                     fileList={fileLists[field.name] || []}
                                                     setFileList={(newList) => {
@@ -183,10 +245,11 @@ const UpdateProduct = () => {
 
                                             <Form.Item
                                                 label="Variant price :"
-                                                name={[field.name, 'variantPrice']}
+                                                name={[field.name, 'price']}
                                                 rules={[{ required: true, message: 'Please input variant price!' }]}
                                             >
                                                 <InputNumber
+                                                    disabled={isPending}
                                                     placeholder="Enter price"
                                                     style={{ width: '100%' }}
                                                     min={0}
@@ -201,6 +264,7 @@ const UpdateProduct = () => {
                                                 rules={[{ required: true, message: 'Please input quantity!' }]}
                                             >
                                                 <InputNumber
+                                                    disabled={isPending}
                                                     style={{ width: '100%' }}
                                                     placeholder="Enter quantity"
                                                     min={1}
@@ -210,7 +274,7 @@ const UpdateProduct = () => {
                                         </Card>
                                     ))}
 
-                                    <Button type="dashed" onClick={handleAdd} block>
+                                    <Button disabled={isPending} type="dashed" onClick={handleAdd} block>
                                         + Add Item
                                     </Button>
                                 </div>
@@ -220,10 +284,10 @@ const UpdateProduct = () => {
                 </div>
             </Form>
             <div className='flex gap-[10px] mt-[20px] mb-[50px]'>
-                <Button className='ml-auto' onClick={() => form.resetFields()}>Cancel</Button>
-                <Button type='primary' onClick={() => form.submit()}>Create</Button>
+                <Button disabled={isPending} className='ml-auto' onClick={() => reset()}>Cancel</Button>
+                <Button loading={isPending} type='primary' onClick={() => form.submit()}>Update</Button>
             </div>
-        </div>
+        </>
     )
 }
 export default UpdateProduct

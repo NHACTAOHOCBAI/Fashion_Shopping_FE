@@ -38,7 +38,6 @@ export const useSelectCategory = () => useQuery({
                 label: category.name
             }
         })
-        console.log('rerender select')
         return selectOpt
     },
     staleTime: 1000 * 60 * 5, // 5 phút không bị stale
