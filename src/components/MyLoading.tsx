@@ -6,7 +6,9 @@ interface MyLoadingProps {
 }
 const MyLoading: React.FC<MyLoadingProps> = ({ spinStyle, size = 48 }) => {
     return (
-        <Spin  {...spinStyle} indicator={<LoadingOutlined spin style={{ fontSize: size }} />} />
+        <div className="flex justify-center items-center w-full h-full">
+            <Spin  {...spinStyle} indicator={<LoadingOutlined spin style={{ fontSize: size }} />} />
+        </div>
     );
 };
 export default MyLoading;

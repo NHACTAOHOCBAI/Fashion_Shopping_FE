@@ -16,6 +16,7 @@ const UpdateBrand = ({ isUpdateOpen, closeUpdateModal, updatedBrand }: UpdateBra
     const [messageApi, contextHolder] = message.useMessage();
     const handleCancel = useCallback(() => {
         form.resetFields();
+        setFileList([])
         closeUpdateModal()
     }, [form, closeUpdateModal]);
     // thuc chat handleCancel se luon khong thay doi

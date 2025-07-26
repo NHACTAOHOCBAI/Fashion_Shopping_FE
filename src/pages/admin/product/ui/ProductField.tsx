@@ -1,6 +1,6 @@
 interface ProductFieldProps {
     title: string,
-    value: string | undefined,
+    value: React.ReactNode,
 }
 const ProductField = ({ title, value }: ProductFieldProps) => {
     return (

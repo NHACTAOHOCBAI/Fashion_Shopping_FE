@@ -1,6 +1,6 @@
 interface MyFieldProps {
     title: string,
-    value: string | undefined,
+    value: React.ReactNode,
     layout?: "horizontal" | "vertical",
 }
 const MyField = ({ title, value, layout = "horizontal" }: MyFieldProps) => {

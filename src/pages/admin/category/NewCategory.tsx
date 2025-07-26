@@ -16,11 +16,14 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
         { value: undefined, label: "No parent" },
         ...(categoryOpt ?? [])
     ], [categoryOpt])
-
     const { mutate: createCategory, isPending } = useCreateCategory();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage();
+    const handleCancel = useCallback(() => {
+        form.resetFields();
+        setFileList([])
+    }, [form]);
     const onFinish: FormProps<Category>['onFinish'] = useCallback((values: Category) => {
         createCategory({
             name: values.name,
@@ -30,7 +33,7 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
         },
             {
                 onSuccess: () => {
-                    form.resetFields();
+                    handleCancel()
                     messageApi.success("Create categories success")
                 },
                 onError: (error) => {
@@ -39,7 +42,7 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
             },
 
         )
-    }, [createCategory, fileList, form, messageApi])
+    }, [createCategory, fileList, handleCancel, messageApi])
     // thuc chat deps chi co fileList
 
     return (
@@ -93,7 +96,10 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
                     </Form.Item>
 
                 </Form>
-                <Button loading={isPending} className='ml-auto block mt-auto' type="primary" onClick={() => form.submit()}><div >Create</div></Button>
+                <div className='flex gap-[10px]'>
+                    <Button disabled={isPending} className='ml-auto' onClick={() => handleCancel()}>Cancel</Button>
+                    <Button loading={isPending} type="primary" onClick={() => form.submit()}>Create</Button>
+                </div>
             </div>
         </>
     )

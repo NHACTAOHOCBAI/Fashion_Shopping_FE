@@ -9,6 +9,10 @@ const NewBrand = () => {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [form] = Form.useForm()
     const [messageApi, contextHolder] = message.useMessage();
+    const handleCancel = useCallback(() => {
+        form.resetFields();
+        setFileList([])
+    }, [form]);
     const onFinish: FormProps<Brand>['onFinish'] = useCallback((values: Brand) => {
         createBrand({
             name: values.name,
@@ -17,7 +21,7 @@ const NewBrand = () => {
         },
             {
                 onSuccess: () => {
-                    form.resetFields();
+                    handleCancel()
                     messageApi.success("Create brand success")
                 },
                 onError: (error) => {
@@ -26,7 +30,7 @@ const NewBrand = () => {
             },
 
         )
-    }, [createBrand, fileList, form, messageApi])
+    }, [createBrand, fileList, messageApi, handleCancel])
     // thuc chat deps chi co fileList
 
     return (
@@ -68,7 +72,10 @@ const NewBrand = () => {
                     </Form.Item>
 
                 </Form>
-                <Button loading={isPending} className='ml-auto block mt-auto' type="primary" onClick={() => form.submit()}>Create</Button>
+                <div className='flex gap-[10px]'>
+                    <Button disabled={isPending} className='ml-auto' onClick={() => handleCancel()}>Cancel</Button>
+                    <Button loading={isPending} type="primary" onClick={() => form.submit()}>Create</Button>
+                </div>
             </div>
         </>
     )

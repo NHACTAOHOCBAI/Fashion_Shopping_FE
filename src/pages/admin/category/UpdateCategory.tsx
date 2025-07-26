@@ -16,7 +16,7 @@ interface UpdateCategoryProps {
 }
 const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categoryOpt }: UpdateCategoryProps) => {
     const categorySelectOpt = useMemo(() => [
-        { value: undefined, label: "No parent" },
+        { value: 0, label: "No parent" },
         ...(categoryOpt?.filter((value) => value.value !== updatedCategory?.id) ?? [])
     ], [categoryOpt, updatedCategory])
     const { mutate: updateCategory, isPending } = useUpdateCategory();
@@ -25,6 +25,7 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
     const [messageApi, contextHolder] = message.useMessage();
     const handleCancel = useCallback(() => {
         form.resetFields();
+        setFileList([])
         closeUpdateModal()
     }, [form, closeUpdateModal]);
     // thuc chat handleCancel se luon khong thay doi
@@ -54,6 +55,14 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
             parentId: updatedCategory?.parentId,
             description: updatedCategory?.description
         })
+        setFileList([
+            {
+                uid: '-1',
+                name: 'category.png',
+                status: 'done',
+                url: updatedCategory?.imageUrl,
+            },
+        ])
     }, [updatedCategory, form])
     return (
         <>

@@ -249,8 +249,8 @@ const NewProduct = () => {
                 </div>
             </Form>
             <div className='flex gap-[10px] mt-[20px] mb-[50px]'>
-                <Button className='ml-auto' onClick={() => reset()}>Cancel</Button>
-                <Button type='primary' onClick={() => form.submit()}>Create</Button>
+                <Button disabled={isPending} className='ml-auto' onClick={() => reset()}>Cancel</Button>
+                <Button loading={isPending} type='primary' onClick={() => form.submit()}>Create</Button>
             </div>
         </>
     )

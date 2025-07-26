@@ -11,5 +11,18 @@ interface Product {
     images: { id: number, productId: number, imageUrl: string }[],
     category: Category,
     brand: Brand,
-    variants: { id: number, productId: number, size: string, color: string, imageUrl: string, quantity: number, remaning: quantity, price: number, createdAt: Date, updatedAt: Date, isActive: boolean }[]
+    variants: Variant[]
+}
+interface Variant {
+    id: number,
+    productId: number,
+    size: string,
+    color: string,
+    imageUrl: string,
+    quantity: number,
+    remaining: quantity,
+    price: number,
+    createdAt: Date,
+    updatedAt: Date,
+    isActive: boolean
 }

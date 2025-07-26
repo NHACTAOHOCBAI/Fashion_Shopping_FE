@@ -15,8 +15,8 @@ import { useGetProdutcById, useUpdateProduct } from '../../../hooks/useProduct';
 const maxFile = import.meta.env.VITE_maxFile
 const UpdateProduct = () => {
     const { id } = useParams();
-    const { mutate: updateProduct, isPending } = useUpdateProduct();
     const { data: updatedProduct } = useGetProdutcById(Number(id))
+    const { mutate: updateProduct, isPending } = useUpdateProduct();
     const { data: categoryOpt } = useSelectCategory()
     const { data: brandOpt } = useSelectBrand()
     const [fileList, setFileList] = useState<UploadFile[]>([]);

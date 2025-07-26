@@ -21,7 +21,7 @@ const DetailCategory = ({ isDetailOpen, detailCategory, closeDetailModal }: Deta
             footer={null}
             onCancel={closeDetailModal}
         >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 ">
                 <Image
                     src={detailCategory?.imageUrl}
                     style={{ aspectRatio: 5 / 3, objectFit: "contain" }} // borderRadius: 0 để tránh bo góc

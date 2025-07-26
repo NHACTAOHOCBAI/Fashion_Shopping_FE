@@ -8,18 +8,18 @@ interface ImageItem {
 }
 
 interface ImageSliderProps {
-    images: ImageItem[];
+    images: ImageItem[] | undefined;
 }
 
 const MyImageDisplay: React.FC<ImageSliderProps> = ({ images }) => {
     return (
         <Carousel arrows autoplay dots effect="fade" style={{ width: '100%', maxWidth: '600px', margin: "auto", aspectRatio: "5/3" }}>
-            {images.map((image, index) => (
+            {images?.map((image, index) => (
                 <div key={index}>
                     <Image
                         src={image.url}
                         alt={image.alt || `Slide ${index + 1}`}
-                        style={{ width: '100%', height: 'auto', objectFit: 'cover', aspectRatio: "5/3" }}
+                        style={{ width: '100%', height: 'auto', objectFit: 'contain', aspectRatio: "5/3" }}
                         preview
                     />
                 </div>
