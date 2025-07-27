@@ -5,9 +5,9 @@ const AntdConfigProvider = ({ children }: any) => {
         <ConfigProvider
             theme={{
                 token: {
-                    colorPrimary: '#FF6B6B', // red-500FF6B6B
-                    colorPrimaryHover: '#ff8d8d', // red-600 (hover)
-                    colorPrimaryActive: '#FF6B6B', // red-700 (focus)
+                    colorPrimary: 'black', // red-500FF6B6B
+                    colorPrimaryHover: '#4a4a4a', // red-600 (hover)
+                    colorPrimaryActive: 'black', // red-700 (focus)
                     fontFamily: 'Nunito Sans,sans-serif',
                     colorText: '#666666',
                     fontSize: 12,

@@ -1,4 +1,4 @@
-:where(.css-dev-only-do-not-override-1blgjfw).ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+/* :where(.css-dev-only-do-not-override-1blgjfw).ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
     border:none;
     background: transparent;
 }
@@ -6,4 +6,12 @@
     border: none;
     box-shadow: none;
     outline: 0;
+} */
+ :where(.css-dev-only-do-not-override-16cktye).ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+    border: none;
+    background: transparent;
+}
+.ant-select-focused:where(.css-dev-only-do-not-override-16cktye).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector{
+border: none;
+    box-shadow:none
 }

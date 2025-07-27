@@ -2,10 +2,11 @@ import { Rate } from "antd"
 import { CiHeart } from "react-icons/ci"
 import NormalButton from "../../../../components/NormalButton"
 import { formatPrice } from "../../../../utils/formatPrice"
+import { Link } from "react-router"
 
 const ProductItem = () => {
     return (
-        <div className="relative bg-white border rounded-lg p-[15px]  w-[240px] duration-500 hover:drop-shadow-lg hover:-translate-y-2 ">
+        <Link to="/products/1" className="relative bg-white border rounded-lg p-[15px]  w-[240px] duration-500 hover:drop-shadow-lg hover:-translate-y-2 ">
             <CiHeart size={24} className="absolute text-white z-10 translate-x-[180px]  translate-y-[10px]" />
             <div className="absolute text-white bg-black rounded-lg px-[10px] py-[5px] z-10 translate-x-[10px]  translate-y-[10px]">50% OFF</div>
             <div className=" aspect-square rounded-lg overflow-hidden">
@@ -16,7 +17,7 @@ const ProductItem = () => {
             <Rate className="text-[12px]" disabled value={4} />
             <p className="text-[20px] font-bold text-text-heading mb-[10px]">{formatPrice(120)}</p>
             <NormalButton>BUY NOW</NormalButton>
-        </div>
+        </Link>
     )
 }
 export default ProductItem
