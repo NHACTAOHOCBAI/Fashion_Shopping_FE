@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react"
 import { Link, useParams } from "react-router"
 import ProductField from "./ui/ProductField"
-import ImageSlider from "../../../components/MyImageDisplay"
+import MyImageDisplay from "../../../components/MyImageDisplay"
 import VariantsCard from "./ui/VariantCard"
 import Reviews from "./ui/Reviews"
 import { useGetProdutcById } from "../../../hooks/useProduct"
@@ -37,7 +37,7 @@ const DetailProduct = () => {
                     <h2 className='font-medium text-[14px] mb-[10px] '>Basic Details</h2>
                     <div className=" flex gap-[40px]">
                         <div className="flex-[1] border rounded ">
-                            <ImageSlider images={thumbnails} />
+                            <MyImageDisplay images={thumbnails} />
                         </div>
                         <div className="flex-[1] flex flex-col gap-[10px]">
                             <ProductField title="Id" value={detailProduct?.id} />

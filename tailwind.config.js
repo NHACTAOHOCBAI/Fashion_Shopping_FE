@@ -28,7 +28,7 @@ export default {
           success: "#52C41A", // xanh lá
         },
         accent: {
-          pinkRed: "#FF6B6B",
+          pinkRed: "black",
           mintGreen: "#00C896",
           yellow: "#FFC300",
           blue: "#00AEFF",
