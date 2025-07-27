@@ -1,7 +1,11 @@
 import { ShoppingCart, UserRound } from "lucide-react"
 import { Link, useLocation } from "react-router"
-
-const Header = () => {
+import MyClickable from "../../components/MyClickable"
+interface HeaderProps {
+    openCart: () => void,
+    closeCart: () => void
+}
+const Header = ({ openCart }: HeaderProps) => {
     return (
         <header className="px-[80px]   bg-white drop-shadow-sm w-full flex pt-[18px]">
             <nav className="flex gap-[40px] overflow-hidden items-center">
@@ -10,9 +14,13 @@ const Header = () => {
                 <NavItem path="blogs" value="BLOGS" />
 
             </nav>
-            <div className="ml-auto flex gap-[10px]">
-                <UserRound size={20} />
-                <ShoppingCart size={20} />
+            <div className="ml-auto flex gap-[10px] items-center pb-[10px]">
+                <MyClickable onClick={openCart}>
+                    <ShoppingCart size={20} />
+                </MyClickable>
+                <MyClickable onClick={openCart}>
+                    <UserRound size={20} />
+                </MyClickable>
             </div>
         </header>
     )

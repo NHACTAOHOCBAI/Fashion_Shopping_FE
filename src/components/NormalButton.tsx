@@ -6,7 +6,7 @@ type NormalButtonProps = {
 const NormalButton = ({ children, className, ...rest }: NormalButtonProps) => {
     return (
         <div
-            className={`cursor-pointer font-bold rounded-xl px-[10px] py-[6px]  border-[2px] w-fit transition-all duration-500  hover:bg-black hover:text-white ${className ?? ''}`}
+            className={`cursor-pointer border-gray-100 font-bold rounded-xl px-[10px] py-[6px]  border-[2px] w-fit transition-all duration-500  hover:bg-black hover:text-white ${className ?? ''}`}
             {...rest}
         >
             {children}

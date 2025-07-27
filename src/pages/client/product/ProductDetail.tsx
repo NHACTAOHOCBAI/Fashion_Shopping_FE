@@ -8,6 +8,14 @@ const thumbnails = [
     {
         alt: `Thumbnail 1`,
         url: "https://i.pinimg.com/736x/0a/6c/8a/0a6c8af6388b24b008890992d6b5bb90.jpg"
+    },
+    {
+        alt: `Thumbnail 2`,
+        url: "https://static0.srcdn.com/wordpress/wp-content/uploads/2023/11/jujutsu-kaisen_yuta-takes-control.jpg"
+    },
+    {
+        alt: `Thumbnail 3`,
+        url: "https://pbs.twimg.com/media/GdH-OFmagAIrhW5.jpg:large"
     }
 ]
 const ProductDetail = () => {

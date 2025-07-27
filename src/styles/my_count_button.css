@@ -1,0 +1,14 @@
+:where(.css-dev-only-do-not-override-16cktye).ant-input-number-outlined {
+    background-color: transparent;
+        border: none;
+}
+:where(.css-dev-only-do-not-override-16cktye).ant-input-number-outlined:focus, :where(.css-dev-only-do-not-override-16cktye).ant-input-number-outlined:focus-within{
+    box-shadow:none;
+background-color: transparent;
+  border: none;
+}
+:where(.css-dev-only-do-not-override-16cktye).ant-input-number-outlined:hover{
+    box-shadow:none;
+background-color: transparent;
+  border: none;
+}
