@@ -17,6 +17,7 @@ const DetailProduct = lazy(() => import('../pages/admin/product/DetailProduct'))
 const Home = lazy(() => import('../pages/client/home/Home'));
 const ClientProduct = lazy(() => import('../pages/client/product/ClientProduct'));
 const ProductDetail = lazy(() => import('../pages/client/product/ProductDetail'));
+const Checkout = lazy(() => import('../pages/client/checkout/Checkout'));
 const router = createBrowserRouter([
     {
         path: "/",
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<MyLoading />}>
                         <ProductDetail />
+                    </Suspense>
+                )
+            },
+            {
+                path: '/checkout',
+                element: (
+                    <Suspense fallback={<MyLoading />}>
+                        <Checkout />
                     </Suspense>
                 )
             }
