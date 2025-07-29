@@ -2,27 +2,40 @@ import { Breadcrumb, Pagination } from "antd"
 import { sizeSelect } from "../../../constants/size"
 import FilterSelect from "./ui/FilterSelect"
 import ProductItem from "./ui/ProductItem"
+import { useLocation } from "react-router"
 
 const ClientProduct = () => {
+    const { pathname } = useLocation();
+    const endpoints = pathname.split('/')
+    const items: {
+        title: string
+        href?: string
+    }[] = [
+            {
+                title: "Products",
+                href: '/products',
+            },
+        ]
+    endpoints.forEach((value, index) => {
+        if (index <= 1)
+            return;
+        items.push({
+            title: endpoints[index],
+            href: value
+        })
+    })
+    if (items.length === 1)
+        items.push({
+            title: "All",
+            href: '',
+        },)
     return (
-        <>
-            <div className="px-[80px]">
-                <Breadcrumb
-                    className="py-[20px]"
-                    items={[
-                        {
-                            title: "Products",
-                        },
-                        {
-                            title: 'Jujutsu kaisen',
-                            href: '',
-                        },
-                        {
-                            title: 'Yuta',
-                            href: '',
-                        },
-                    ]}
-                />
+        <div className="px-[80px]" >
+            <Breadcrumb
+                className="py-[20px]"
+                items={items}
+            />
+            <div >
                 <div className="flex gap-[10px]">
                     <h1 className="font-bold text-text-heading text-[40px]">Yuta</h1>
                     <span className="pt-[25px]">( 57 )</span>
@@ -54,7 +67,7 @@ const ClientProduct = () => {
                         pageSize={5} total={50} />
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

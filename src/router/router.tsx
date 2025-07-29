@@ -32,15 +32,13 @@ const router = createBrowserRouter([
                 )
             },
             {
-                path: '/products',
-                element: (
-                    <Suspense fallback={<MyLoading />}>
-                        <ClientProduct />
-                    </Suspense>
-                )
+                path: '/products/*',
+                element: <Suspense fallback={<MyLoading />}>
+                    <ClientProduct />
+                </Suspense>,
             },
             {
-                path: '/products/:id',
+                path: '/product-detail/:id',
                 element: (
                     <Suspense fallback={<MyLoading />}>
                         <ProductDetail />

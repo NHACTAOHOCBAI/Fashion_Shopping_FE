@@ -4,6 +4,7 @@ import MyImageDisplay from "../../../components/MyImageDisplay";
 import { FaStar } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import Reviews from "../../admin/product/ui/Reviews";
+import { useLocation } from "react-router";
 const thumbnails = [
     {
         alt: `Thumbnail 1`,
@@ -19,6 +20,9 @@ const thumbnails = [
     }
 ]
 const ProductDetail = () => {
+    const { pathname } = useLocation();
+    const endpoints = pathname.split('/')
+    const idProduct = endpoints.pop()
     return (
         <div className="mx-[80px] mb-[20px]">
             <Breadcrumb
@@ -26,14 +30,11 @@ const ProductDetail = () => {
                 items={[
                     {
                         title: "Products",
+                        href: "/products"
                     },
                     {
-                        title: 'Jujutsu kaisen',
-                        href: '',
-                    },
-                    {
-                        title: 'Yuta',
-                        href: '',
+                        title: idProduct,
+                        href: `/product-detail/${idProduct}`,
                     },
                 ]}
             />
