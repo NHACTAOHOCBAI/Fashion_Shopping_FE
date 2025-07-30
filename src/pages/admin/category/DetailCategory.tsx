@@ -24,21 +24,28 @@ const DetailCategory = ({ isDetailOpen, detailCategory, closeDetailModal }: Deta
             <div className="flex flex-col gap-2 ">
                 <Image
                     src={detailCategory?.imageUrl}
-                    style={{ aspectRatio: 5 / 3, objectFit: "contain" }} // borderRadius: 0 để tránh bo góc
-                    className=" rounded"
+                    style={{ aspectRatio: 5 / 3, objectFit: "contain" }}
+                    className="rounded"
                 />
                 <MyField
                     title="Category name"
                     value={detailCategory?.name}
                 />
                 <MyField
-                    title="Parent category"
-                    value={detailCategory?.parent?.name}
+                    title="Type"
+                    value={detailCategory?.type}
                 />
-                <MyField
-                    title="Sub categories"
-                    value={subCategories}
-                />
+                {
+                    detailCategory?.type === "CHILD" ?
+                        <MyField
+                            title="Parent category"
+                            value={detailCategory?.parent?.name}
+                        /> :
+                        <MyField
+                            title="Sub categories"
+                            value={subCategories}
+                        />
+                }
                 <div className="flex justify-between">
                     <MyField
                         title="Created at"

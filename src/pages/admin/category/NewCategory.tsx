@@ -2,7 +2,7 @@ import type { FormProps, UploadFile } from 'antd';
 import { Button, Form, Input, message } from 'antd';
 import MySelect from '../../../components/MySelect';
 import TextArea from 'antd/es/input/TextArea';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useCreateCategory } from '../../../hooks/useCategory';
 import MyUploadFile from '../../../components/MyUploadFile';
 interface NewCategoryProps {
@@ -12,10 +12,6 @@ interface NewCategoryProps {
     }[] | undefined
 }
 const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
-    const categorySelectOpt = useMemo(() => [
-        { value: undefined, label: "No parent" },
-        ...(categoryOpt ?? [])
-    ], [categoryOpt])
     const { mutate: createCategory, isPending } = useCreateCategory();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [form] = Form.useForm()
@@ -96,7 +92,7 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
                             showSearch
                             disabled={isPending || type !== "CHILD"}
                             placeholder="Bags..."
-                            options={categorySelectOpt}
+                            options={categoryOpt}
                         />
                     </Form.Item>
                     <Form.Item<Category>

@@ -3,7 +3,7 @@ import { Form, Input, message, Modal, type FormProps, type UploadFile } from 'an
 import MySelect from '../../../components/MySelect';
 import TextArea from 'antd/es/input/TextArea';
 import { useUpdateCategory } from '../../../hooks/useCategory';
-import { useCallback, useEffect, useState, memo, useMemo } from 'react';
+import { useCallback, useEffect, useState, memo } from 'react';
 import MyUploadFile from '../../../components/MyUploadFile';
 interface UpdateCategoryProps {
     isUpdateOpen: boolean,
@@ -15,13 +15,10 @@ interface UpdateCategoryProps {
     }[] | undefined
 }
 const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categoryOpt }: UpdateCategoryProps) => {
-    const categorySelectOpt = useMemo(() => [
-        { value: 0, label: "No parent" },
-        ...(categoryOpt?.filter((value) => value.value !== updatedCategory?.id) ?? [])
-    ], [categoryOpt, updatedCategory])
     const { mutate: updateCategory, isPending } = useUpdateCategory();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [form] = Form.useForm()
+    const type = Form.useWatch("type", form);
     const [messageApi, contextHolder] = message.useMessage();
     const handleCancel = useCallback(() => {
         form.resetFields();
@@ -36,6 +33,7 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
             description: values.description,
             image: fileList[0].originFileObj,
             parentId: values.parentId,
+            type: values.type
         },
             {
                 onSuccess: () => {
@@ -53,7 +51,8 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
         form.setFieldsValue({
             name: updatedCategory?.name,
             parentId: updatedCategory?.parentId,
-            description: updatedCategory?.description
+            description: updatedCategory?.description,
+            type: updatedCategory?.type
         })
         setFileList([
             {
@@ -89,13 +88,36 @@ const UpdateCategory = ({ isUpdateOpen, closeUpdateModal, updatedCategory, categ
                         <Input placeholder='Shoulder bags...' />
                     </Form.Item>
                     <Form.Item<Category>
+                        label="Type : "
+                        name="type"
+                        rules={[{ required: true, message: 'Please input your username!' }]}
+                    >
+                        <MySelect
+                            showSearch
+                            disabled={isPending}
+                            placeholder="Bags..."
+                            options={[
+                                {
+                                    value: "CHILD",
+                                    label: "Child",
+                                },
+                                {
+                                    value: "PARENT",
+                                    label: "Parent",
+                                }
+                            ]}
+                        />
+                    </Form.Item>
+                    <Form.Item<Category>
                         label="Parent Category : "
                         name="parentId"
                     >
                         <MySelect
+
                             showSearch
+                            disabled={isPending || type !== "CHILD"}
                             placeholder="Bags..."
-                            options={categorySelectOpt}
+                            options={categoryOpt}
                         />
                     </Form.Item>
                     <Form.Item<Category>

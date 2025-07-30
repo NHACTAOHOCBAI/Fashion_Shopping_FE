@@ -6,9 +6,11 @@ import { useProdutcs } from "../../../hooks/useProduct"
 import usePaginationSearch from "../../../hooks/usePaginationSearch"
 import type { ProductFilters } from "../../admin/product/Product"
 import useBreadcrumbItems from "./hooks/useBreadcrumItems"
+import { useLocation } from "react-router"
 const productItemsPerPage = import.meta.env.VITE_productItemsPerPage
 const ClientProduct = () => {
-    const items = useBreadcrumbItems()
+    const { pathname } = useLocation();
+    const items = useBreadcrumbItems(pathname)
     const { currentPage, setCurrentPage, keyword, setKeyword, debouncedKeyword, debouncedPage, setSortData, sortData, filters, setFilters } = usePaginationSearch<ProductFilters>()
     const { data: productsData, isPending } = useProdutcs({
         page: debouncedPage,

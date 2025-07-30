@@ -11,11 +11,10 @@ const createCategory = async (data: {
     description?: string;
     type: "CHILD" | "PARENT"
 }) => {
-    console.log(data)
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('type', data.type);
-    // if (data.parentId) formData.append('parentId', String(data.parentId));
+    if (data.parentId) formData.append('parentId', String(data.parentId));
     if (data.description) formData.append('description', data.description);
     if (data.image) formData.append('image', data.image);
 
@@ -32,8 +31,10 @@ const updateCategory = async (data: {
     parentId?: number;
     image?: File;
     description?: string;
+    type: "CHILD" | "PARENT"
 }) => {
     const formData = new FormData();
+    formData.append('type', data.type);
     if (data.name) formData.append('name', data.name);
     if (data.parentId) formData.append('parentId', String(data.parentId));
     if (data.description) formData.append('description', data.description);
