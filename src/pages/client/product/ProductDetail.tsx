@@ -1,127 +1,176 @@
 
-import { Breadcrumb, Button, Divider, Radio, type RadioChangeEvent } from "antd";
+import { Breadcrumb, Button, Divider, message, Radio, type RadioChangeEvent } from "antd";
 import MyImageDisplay from "../../../components/MyImageDisplay";
 import { FaStar } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import Reviews from "../../admin/product/ui/Reviews";
-import { useLocation } from "react-router";
-const thumbnails = [
-    {
-        alt: `Thumbnail 1`,
-        url: "https://i.pinimg.com/736x/0a/6c/8a/0a6c8af6388b24b008890992d6b5bb90.jpg"
-    },
-    {
-        alt: `Thumbnail 2`,
-        url: "https://static0.srcdn.com/wordpress/wp-content/uploads/2023/11/jujutsu-kaisen_yuta-takes-control.jpg"
-    },
-    {
-        alt: `Thumbnail 3`,
-        url: "https://pbs.twimg.com/media/GdH-OFmagAIrhW5.jpg:large"
-    }
-]
+import { useParams } from "react-router";
+import { useGetProdutcById } from "../../../hooks/useProduct";
+import { useMemo } from "react";
+import { formatPrice } from "../../../utils/formatPrice";
+import useDetailProduct from "./hooks/useImagesPreview";
+import { useNotify } from "../../../components/MyNotification";
 const ProductDetail = () => {
-    const { pathname } = useLocation();
-    const endpoints = pathname.split('/')
-    const idProduct = endpoints.pop()
+    const [messageApi, contextHolder] = message.useMessage();
+    const notify = useNotify();
+    const { id } = useParams();
+    const { data: detailProduct, isPending } = useGetProdutcById(Number(id))
+    // 
+    const { carouselRef, selectedColor, selectedSize, setSelectedColor, setSelectedSize, thumbnails, matchedPrice, quantity, stock } = useDetailProduct(detailProduct)
+    const handleAddToCart = () => {
+        if (!selectedColor || !selectedSize) {
+            notify({
+                message: "Missing Options",
+                description: "Please select both size and color before adding to cart.",
+            });
+            return;
+        }
+        messageApi.success(`Add ${detailProduct?.name} to your cart successfully`)
+    }
     return (
-        <div className="mx-[80px] mb-[20px]">
-            <Breadcrumb
-                className="py-[20px]"
-                items={[
-                    {
-                        title: "Products",
-                        href: "/products"
-                    },
-                    {
-                        title: idProduct,
-                        href: `/product-detail/${idProduct}`,
-                    },
-                ]}
-            />
-            <div className="flex gap-[40px]">
-                <div className="flex-[1] border rounded-lg h-fit ">
-                    <MyImageDisplay images={thumbnails} />
-                </div>
-                <div className="flex-[1] relative min-h-[500px] flex flex-col justify-between">
-                    <div>
-                        <CiHeart size={24} className="absolute text-gray-300 z-10 top-[0x] right-[0px]" />
-                        <h3 className="font-medium text-[14px] text-gray-500">Nike</h3>
-                        <h2 className="text-[40px] font-semibold text-text-heading">Alpha All-Purpose Gen Z</h2>
-                        <p className=" my-[10px] w-[80%]">Introducing the Nike Alpha All-Purpose Gen Z, the latest evolution in athletic footwear designed to meet the dynamic needs of the modern generation. These cutting-edge trainers represent a fusion of style, technology, and performance, making them a perfect choice for those who value both form and function. The Gen Z boasts a sleek, contemporary design that </p>
-                        <div className="flex items-center gap-[10px] my-[10px]">
-                            <div><span className="font-semibold text-text-heading text-[14px]">100+</span> sold</div>
-                            <Divider type="vertical" />
-                            <div className="flex items-center gap-[5px]">
-                                <FaStar className="text-yellow-300" />
-                                <div>
-                                    <span className="font-semibold text-text-heading text-[14px]">4.8</span><span>(156 reviews)</span>
+        <>
+            {contextHolder}
+            <div className="mx-[80px] mb-[20px]">
+                <Breadcrumb
+                    className="py-[20px]"
+                    items={[
+                        {
+                            title: "Products",
+                            href: "/products"
+                        },
+                        {
+                            title: id,
+                            href: `/product-detail/${id}`,
+                        },
+                    ]}
+                />
+                <div className="flex gap-[40px]">
+                    <div className="flex-[1] border rounded-lg h-fit ">
+                        <MyImageDisplay carouselRef={carouselRef} images={thumbnails} />
+                    </div>
+                    <div className="flex-[1] relative min-h-[500px] flex flex-col justify-between">
+                        <div>
+                            <CiHeart size={24} className="absolute text-gray-300 z-10 top-[0x] right-[0px]" />
+                            <h3 className="font-medium text-[14px] text-gray-500">{detailProduct?.brand.name}</h3>
+                            <h2 className="text-[40px] font-semibold text-text-heading">{detailProduct?.name}</h2>
+                            <p className=" my-[10px] w-[80%]">{detailProduct?.description}</p>
+
+                        </div>
+                        <div >
+                            <div className="flex items-center gap-[10px] my-[10px]">
+                                <div><span className="font-semibold text-text-heading text-[14px]">{quantity - stock}+</span> sold</div>
+                                <Divider type="vertical" />
+                                <div className="flex items-center gap-[5px]">
+                                    <FaStar className="text-yellow-300" />
+                                    <div>
+                                        <span className="font-semibold text-text-heading text-[14px]">4.8</span><span>(156 reviews)</span>
+                                    </div>
                                 </div>
                             </div>
+                            <h3 className="font-semibold text-text-heading text-[20px] mb-[40px]">{formatPrice(matchedPrice)}</h3>
+                            <Options
+                                variants={detailProduct?.variants}
+                                selectedColor={selectedColor}
+                                setSelectedColor={setSelectedColor}
+                                selectedSize={selectedSize}
+                                setSelectedSize={setSelectedSize}
+                            />
+                            <Button onClick={handleAddToCart} type="primary" className="w-[80%] mb-[20px]  bg-yellow-300 py-[24px]  font-bold text-[20px] rounded-2xl">Add to Cart</Button>
                         </div>
-                        <h3 className="font-semibold text-text-heading text-[20px] mb-[40px]">$ 90</h3>
-                    </div>
-                    <div >
-                        <Options />
-                        <Button type="primary" className="w-[80%] mb-[20px]  bg-yellow-300 py-[24px]  font-bold text-[20px] rounded-2xl">Add to Cart</Button>
                     </div>
                 </div>
+                <Reviews />
             </div>
-            <Reviews />
-        </div>
+        </>
     )
 }
-const Options = () => {
-    const onChange = (e: RadioChangeEvent) => {
-        console.log(`radio checked:${e.target.value}`);
+interface OptionsProps {
+    variants: Variant[] | undefined;
+    selectedColor: string | undefined;
+    setSelectedColor: (value: string | undefined) => void;
+    selectedSize: string | undefined;
+    setSelectedSize: (value: string | undefined) => void;
+}
+
+const Options = ({
+    variants,
+    selectedColor,
+    setSelectedColor,
+    selectedSize,
+    setSelectedSize,
+}: OptionsProps) => {
+    const onColorChange = (e: RadioChangeEvent) => {
+        setSelectedColor(e.target.value);
+        setSelectedSize(undefined)
     };
-    const colorOptions = [
-        { value: 'white-orange', image: '/img/white-orange.png' },
-        { value: 'black-red', image: '/img/black-red.png' },
-        { value: 'gray', image: '/img/gray.png' },
-    ];
-    const sizeOptions = [
-        { value: 'letter-XS', title: 'XS (Extra Small)' },
-        { value: 'letter-S', title: 'S (Small)' },
-        { value: 'letter-M', title: 'M (Medium)' },
-        { value: 'letter-L', title: 'L (Large)' },
-        { value: 'letter-XL', title: 'XL (Extra Large)' },
-        { value: 'letter-XXL', title: 'XXL (2X Large)' },
-        { value: 'letter-XXXL', title: 'XXXL (3X Large)' },
-        { value: 'number-28', title: '28' },
-        { value: 'number-30', title: '30' },
-        { value: 'number-32', title: '32' },
-        { value: 'number-34', title: '34' },
-        { value: 'number-36', title: '36' },
-        { value: 'number-38', title: '38' },
-        { value: 'number-40', title: '40' },
-    ];
+    const onSizeChange = (e: RadioChangeEvent) => {
+        setSelectedSize(e.target.value);
+    };
+
+    // Lấy màu duy nhất
+    const colorOptions = useMemo(() => {
+        const set = new Set<string>();
+        variants?.forEach((v) => set.add(v.color));
+        return Array.from(set);
+    }, [variants]);
+
+    // Lấy size duy nhất
+    const sizeOptions = useMemo(() => {
+        const set = new Set<string>();
+        variants?.forEach((v) => set.add(v.size));
+        return Array.from(set);
+    }, [variants]);
+
+    const isValidColor = (color: string) => {
+        if (selectedSize === undefined)
+            return true
+        const result = variants?.find((value) => value.color === color && value.size === selectedSize)
+        if (result === undefined)
+            return false;
+        return true;
+    }
+    const isValidSize = (size: string) => {
+        if (selectedColor === undefined)
+            return true
+        const result = variants?.find((value) => value.size === size && value.color === selectedColor)
+        if (result === undefined)
+            return false;
+        return true;
+    }
     return (
         <div className="flex flex-col gap-[20px] mb-[20px]">
             <div>
-                <div className="mb-[8px]"><span className="font-semibold text-text-heading text-[14px]">Color :</span> <span> White-Orange</span></div>
-                <Radio.Group onChange={onChange} defaultValue="a">
-                    <div className="flex gap-[10px]">
-                        {colorOptions.map((value) => {
-                            return (
-                                <Radio.Button className="" value={value.value}>{value.value}</Radio.Button>
-                            )
-                        })}
+                <div className="mb-[8px]">
+                    <span className="font-semibold text-text-heading text-[14px]">Color :</span>{' '}
+                    <span>{selectedColor || 'None'}</span>
+                </div>
+                <Radio.Group onChange={onColorChange} value={selectedColor}>
+                    <div className="flex gap-[10px] flex-wrap">
+                        {colorOptions.map((value) => (
+                            <Radio.Button key={value} value={value}>
+                                {value}
+                            </Radio.Button>
+                        ))}
                     </div>
                 </Radio.Group>
             </div>
             <div>
-                <div className="mb-[8px]"><span className="font-semibold text-text-heading text-[14px]">Color :</span> <span> White-Orange</span></div>
-                <Radio.Group onChange={onChange} defaultValue="a">
+                <div className="mb-[8px]">
+                    <span className="font-semibold text-text-heading text-[14px]">Size :</span>{' '}
+                    <span>{selectedSize || 'None'}</span>
+                </div>
+                <Radio.Group onChange={onSizeChange} value={selectedSize}>
                     <div className="flex gap-[10px] flex-wrap">
-                        {sizeOptions.map((value) => {
-                            return (
-                                <Radio.Button className="" value={value.value}>{value.value}</Radio.Button>
-                            )
-                        })}
+                        {sizeOptions.map((value) => (
+                            <Radio.Button disabled={!isValidSize(value)} key={value} value={value}>
+                                {value}
+                            </Radio.Button>
+                        ))}
                     </div>
                 </Radio.Group>
             </div>
         </div>
-    )
-}
+    );
+};
+
 export default ProductDetail

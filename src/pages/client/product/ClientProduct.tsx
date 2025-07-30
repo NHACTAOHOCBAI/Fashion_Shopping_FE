@@ -2,33 +2,21 @@ import { Breadcrumb, Pagination } from "antd"
 import { sizeSelect } from "../../../constants/size"
 import FilterSelect from "./ui/FilterSelect"
 import ProductItem from "./ui/ProductItem"
-import { useLocation } from "react-router"
-
+import { useProdutcs } from "../../../hooks/useProduct"
+import usePaginationSearch from "../../../hooks/usePaginationSearch"
+import type { ProductFilters } from "../../admin/product/Product"
+import useBreadcrumbItems from "./hooks/useBreadcrumItems"
+const productItemsPerPage = import.meta.env.VITE_productItemsPerPage
 const ClientProduct = () => {
-    const { pathname } = useLocation();
-    const endpoints = pathname.split('/')
-    const items: {
-        title: string
-        href?: string
-    }[] = [
-            {
-                title: "Products",
-                href: '/products',
-            },
-        ]
-    endpoints.forEach((value, index) => {
-        if (index <= 1)
-            return;
-        items.push({
-            title: endpoints[index],
-            href: value
-        })
-    })
-    if (items.length === 1)
-        items.push({
-            title: "All",
-            href: '',
-        },)
+    const items = useBreadcrumbItems()
+    const { currentPage, setCurrentPage, keyword, setKeyword, debouncedKeyword, debouncedPage, setSortData, sortData, filters, setFilters } = usePaginationSearch<ProductFilters>()
+    const { data: productsData, isPending } = useProdutcs({
+        page: debouncedPage,
+        limit: productItemsPerPage,
+        keyword: debouncedKeyword,
+        order: sortData?.sort,
+        sort: sortData?.value,
+    });
     return (
         <div className="px-[80px]" >
             <Breadcrumb
@@ -53,22 +41,25 @@ const ClientProduct = () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-5 gap-[10px] p-[10px]">
-                    <ProductItem />
-                    <ProductItem />
-                    <ProductItem />
-                    <ProductItem />
-                    <ProductItem />
-                    <ProductItem />
-                    <ProductItem />
-                    <ProductItem />
+                    {productsData?.products.map((value) => {
+                        return (
+                            <ProductItem item={value} />
+                        )
+                    })}
+
                 </div>
                 <div className="flex justify-end w-full p-[20px] pb-[50px]">
                     <Pagination className="mt-[10px] ml-auto"
-                        pageSize={5} total={50} />
+                        pageSize={productItemsPerPage}
+                        total={productsData?.pagination.total}
+                        current={currentPage}
+                        onChange={(value) => {
+                            setCurrentPage(value)
+                        }}
+                    />
                 </div>
             </div>
         </div>
     )
 }
-
 export default ClientProduct

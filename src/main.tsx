@@ -9,6 +9,7 @@ import { Provider } from 'react-redux'
 import { store } from './redux/store'
 import { AuthProvider } from './context/AuthProvider'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import { NotificationProvider } from './components/MyNotification'
 const queryClient = new QueryClient();
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID
 createRoot(document.getElementById('root')!).render(
@@ -18,7 +19,9 @@ createRoot(document.getElementById('root')!).render(
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <AntdConfigProvider>
-              <RouterProvider router={router} />
+              <NotificationProvider>
+                <RouterProvider router={router} />
+              </NotificationProvider>
             </AntdConfigProvider>
           </QueryClientProvider>
         </Provider>

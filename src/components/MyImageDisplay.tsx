@@ -9,11 +9,14 @@ interface ImageItem {
 
 interface ImageSliderProps {
     images: ImageItem[] | undefined;
+    carouselRef?: React.RefObject<any>;
 }
 
-const MyImageDisplay: React.FC<ImageSliderProps> = ({ images }) => {
+const MyImageDisplay: React.FC<ImageSliderProps> = ({ images, carouselRef }) => {
     return (
-        <Carousel arrows autoplay dots effect="fade" style={{ width: '100%', maxWidth: '600px', margin: "auto", aspectRatio: "5/3" }}>
+        <Carousel
+            ref={carouselRef}
+            lazyLoad='progressive' arrows autoplay dots effect="fade" style={{ width: '100%', maxWidth: '600px', margin: "auto", aspectRatio: "5/3" }}>
             {images?.map((image, index) => (
                 <div key={index}>
                     <Image

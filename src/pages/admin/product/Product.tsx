@@ -33,7 +33,6 @@ const Products: React.FC = () => {
         keyword: debouncedKeyword,
         order: sortData?.sort,
         sort: sortData?.value,
-
     });
     const { mutate: deleteProduct } = useDeleteProduct()
     const handleDelete = useCallback((id: number) => {
