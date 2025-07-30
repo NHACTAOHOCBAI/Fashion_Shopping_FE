@@ -2,6 +2,7 @@ import { ShoppingCart, UserRound } from "lucide-react"
 import { Link, useLocation } from "react-router"
 import MyClickable from "../../components/MyClickable"
 import { Dropdown } from "antd"
+import { useCategories } from "../../hooks/useCategory"
 interface HeaderProps {
     openCart: () => void,
     closeCart: () => void
@@ -25,67 +26,69 @@ const Header = ({ openCart }: HeaderProps) => {
         </header>
     )
 }
-const menu = (
-    <div className="bg-black text-white w-screen grid grid-cols-4 gap-6 p-[50px] drop-shadow-xl pb-[80px]">
-        <div>
-            <h4 className="font-bold text-white mb-2">Thời trang nam</h4>
-            <ul className="list-disc pl-4">
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-            </ul>
+const Menu = () => {
+    return (
+        <div className="bg-black text-white w-screen grid grid-cols-4 gap-6 p-[50px] drop-shadow-xl pb-[80px]">
+            <div>
+                <h4 className="font-bold text-white mb-2">Thời trang nam</h4>
+                <ul className="list-disc pl-4">
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-bold text-white mb-2">Thời trang nam</h4>
+                <ul className="list-disc pl-4">
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-bold text-white mb-2">Thời trang nam</h4>
+                <ul className="list-disc pl-4">
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-bold text-white mb-2">Thời trang nữ</h4>
+                <ul className="list-disc pl-4">
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-bold text-white mb-2">Phụ kiện</h4>
+                <ul className="list-disc pl-4">
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-bold text-white mb-2">Phụ kiện</h4>
+                <ul className="list-disc pl-4">
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                    <li className="p-[5px]">Áo khoác nam</li>
+                </ul>
+            </div>
         </div>
-        <div>
-            <h4 className="font-bold text-white mb-2">Thời trang nam</h4>
-            <ul className="list-disc pl-4">
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-            </ul>
-        </div>
-        <div>
-            <h4 className="font-bold text-white mb-2">Thời trang nam</h4>
-            <ul className="list-disc pl-4">
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-            </ul>
-        </div>
-        <div>
-            <h4 className="font-bold text-white mb-2">Thời trang nữ</h4>
-            <ul className="list-disc pl-4">
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-            </ul>
-        </div>
-        <div>
-            <h4 className="font-bold text-white mb-2">Phụ kiện</h4>
-            <ul className="list-disc pl-4">
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-            </ul>
-        </div>
-        <div>
-            <h4 className="font-bold text-white mb-2">Phụ kiện</h4>
-            <ul className="list-disc pl-4">
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-                <li className="p-[5px]">Áo khoác nam</li>
-            </ul>
-        </div>
-    </div>
-);
+    )
+};
 
 const MegaMenu = () => (
-    <Dropdown overlay={menu} trigger={['hover']} placement="bottomCenter">
+    <Dropdown overlay={Menu} trigger={['hover']} placement="bottomCenter">
         <div>
             <NavItem path="products" value="PRODUCTS" />
         </div>

@@ -19,6 +19,7 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
     const { mutate: createCategory, isPending } = useCreateCategory();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [form] = Form.useForm()
+    const type = Form.useWatch("type", form);
     const [messageApi, contextHolder] = message.useMessage();
     const handleCancel = useCallback(() => {
         form.resetFields();
@@ -30,6 +31,7 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
             description: values.description,
             image: fileList[0]?.originFileObj,
             parentId: values.parentId,
+            type: values.type
         },
             {
                 onSuccess: () => {
@@ -65,12 +67,34 @@ const NewCategory = ({ categoryOpt }: NewCategoryProps) => {
                         <Input disabled={isPending} placeholder='Shoulder bags...' />
                     </Form.Item>
                     <Form.Item<Category>
-                        label="Parent Category : "
-                        name="parentId"
+                        label="Type : "
+                        name="type"
+                        rules={[{ required: true, message: 'Please input your username!' }]}
                     >
                         <MySelect
                             showSearch
                             disabled={isPending}
+                            placeholder="Bags..."
+                            options={[
+                                {
+                                    value: "CHILD",
+                                    label: "Child",
+                                },
+                                {
+                                    value: "PARENT",
+                                    label: "Parent",
+                                }
+                            ]}
+                        />
+                    </Form.Item>
+                    <Form.Item<Category>
+                        label="Parent Category : "
+                        name="parentId"
+                    >
+                        <MySelect
+
+                            showSearch
+                            disabled={isPending || type !== "CHILD"}
                             placeholder="Bags..."
                             options={categorySelectOpt}
                         />

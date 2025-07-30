@@ -9,10 +9,13 @@ const createCategory = async (data: {
     parentId?: number;
     image?: File;
     description?: string;
+    type: "CHILD" | "PARENT"
 }) => {
+    console.log(data)
     const formData = new FormData();
     formData.append('name', data.name);
-    if (data.parentId) formData.append('parentId', String(data.parentId));
+    formData.append('type', data.type);
+    // if (data.parentId) formData.append('parentId', String(data.parentId));
     if (data.description) formData.append('description', data.description);
     if (data.image) formData.append('image', data.image);
 

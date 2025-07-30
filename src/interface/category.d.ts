@@ -9,4 +9,5 @@ interface Category {
     createdAt: Date;
     updatedAt: Date;
     products?: Product[]
+    type: "CHILD" | "PARENT"
 }
